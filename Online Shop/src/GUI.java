@@ -64,8 +64,10 @@ public class GUI implements ActionListener {
 		String user = userText.getText();
 		String password = passwordText.getText();
 		
-		if(user.equals("Anne") && password.equals("claireEludo444")) {
-			success.setText("login finished!");			
+		if(user.equals("Anne") && password.equals("123")) {
+			success.setText("login finished!");	
+            
+            new MainFrame();
 		}
 		
 	}
