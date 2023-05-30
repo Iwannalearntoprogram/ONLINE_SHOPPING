@@ -1,0 +1,48 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class MainFrame extends JFrame {
+    private JButton cart;
+
+    public MainFrame() {
+        setLayout(null);
+
+        // Create the background label
+        ImageIcon bg = new ImageIcon("Background.png");
+        JLabel backgroundLabel = new JLabel(bg);
+
+        // Set the bounds and layout for the background label
+        backgroundLabel.setBounds(0, 0, 1100, 800);
+        backgroundLabel.setLayout(null);
+
+        // Create the cart button
+        cart = new JButton("Cart");
+
+        // Set the bounds for the cart button
+        cart.setBounds(500, 50, 100, 50);
+
+        // Customize the cart button
+        cart.setFont(new Font("Comic Sans", Font.BOLD, 25));
+        cart.setHorizontalTextPosition(JButton.CENTER);
+        cart.setVerticalTextPosition(JButton.BOTTOM);
+
+        // Add the cart button to the background label
+        backgroundLabel.add(cart);
+
+        // Set the properties for the frame
+        setTitle("NAOIMISE");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(1100, 943);
+        setLocationRelativeTo(null);
+        setResizable(false);
+
+        // Set the content pane to the background label
+        setContentPane(backgroundLabel);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new MainFrame());
+    }
+}
