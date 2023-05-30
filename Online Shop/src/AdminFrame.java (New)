@@ -1,0 +1,48 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class AdminFrame extends JFrame {
+    private JButton adminButton;
+
+    public AdminFrame() {
+        setLayout(null);
+
+        // Create the background label
+        ImageIcon bg = new ImageIcon("Background.png");
+        JLabel backgroundLabel = new JLabel(bg);
+
+        // Set the bounds and layout for the background label
+        backgroundLabel.setBounds(0, 0, 1100, 800);
+        backgroundLabel.setLayout(null);
+
+        // Create the admin button
+        adminButton = new JButton("");
+
+        // Set the bounds for the admin button
+        adminButton.setBounds(500, 50, 100, 50);
+
+        // Customize the admin button
+        adminButton.setFont(new Font("Comic Sans", Font.BOLD, 25));
+        adminButton.setHorizontalTextPosition(JButton.CENTER);
+        adminButton.setVerticalTextPosition(JButton.BOTTOM);
+
+        // Add the admin button to the background label
+        backgroundLabel.add(adminButton);
+
+        // Set the properties for the frame
+        setTitle("Admin Panel");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(1100, 800);
+        setLocationRelativeTo(null);
+        setResizable(false);
+
+        // Set the content pane to the background label
+        setContentPane(backgroundLabel);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new AdminFrame());
+    }
+}
