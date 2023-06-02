@@ -96,17 +96,16 @@ public class RegisterGUI implements ActionListener {
     }
 
     public String encryptText(String inputText) {
-        return new StringBuilder(inputText).reverse().toString();
+        return new StringBuilder(inputText).toString();
     }
 
 	//Encryption to TextFile (Don't make this public so it can't be accessed)
 
     private void saveToFile(String encryptedEmail, String encryptedPassword) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("encrypted_data.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("encrypted_data.txt",true));
             writer.write("Email: " + encryptedEmail);
-            writer.newLine();
-            writer.write("Password: " + encryptedPassword);
+            writer.write(" Password: " + encryptedPassword + "\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
