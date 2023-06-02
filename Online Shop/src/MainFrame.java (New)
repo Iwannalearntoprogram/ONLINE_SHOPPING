@@ -1,8 +1,18 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.beans.EventHandler;
 
 public class MainFrame extends JFrame {
     private JButton cart;
+    private JButton bread;
+    private ImageIcon bd;
+    private ImageIcon bd2;
 
     public MainFrame() {
         setLayout(null);
@@ -10,6 +20,10 @@ public class MainFrame extends JFrame {
         // Create the background label
         ImageIcon bg = new ImageIcon("Background.png");
         JLabel backgroundLabel = new JLabel(bg);
+
+        ImageIcon bd = new ImageIcon("Bread.png");
+        ImageIcon bd2 = new ImageIcon("chocolate.png");
+        JButton bread = new JButton(bd);
 
         // Set the bounds and layout for the background label
         backgroundLabel.setBounds(0, 0, 1100, 800);
@@ -20,14 +34,44 @@ public class MainFrame extends JFrame {
 
         // Set the bounds for the cart button
         cart.setBounds(500, 50, 100, 50);
+        bread.setBounds(400, 100, 120 , 120);
+        bread.setOpaque(false);
+        bread.setBackground(new Color(0, 0, 0, 0));
+        bread.setFocusable(false);
+        bread.setFocusPainted(false);
+        bread.setContentAreaFilled(false);
+        bread.setBorder(new EmptyBorder(5, 15, 5, 15));
+        bread.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
+                bread.setIcon(bd2);
+            }
+
+            public void mousePressed(MouseEvent e) {
+            }
+
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            public void mouseExited(MouseEvent e) {
+                bread.setIcon(bd);
+            }
+        });
+            
+
+
 
         // Customize the cart button
         cart.setFont(new Font("Comic Sans", Font.BOLD, 25));
         cart.setHorizontalTextPosition(JButton.CENTER);
         cart.setVerticalTextPosition(JButton.BOTTOM);
+        cart.setFocusable(false);
 
         // Add the cart button to the background label
         backgroundLabel.add(cart);
+        backgroundLabel.add(bread);
 
         // Set the properties for the frame
         setTitle("NAOIMISE");
@@ -40,7 +84,7 @@ public class MainFrame extends JFrame {
         setContentPane(backgroundLabel);
 
         setVisible(true);
-    }
+    } 
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainFrame());
