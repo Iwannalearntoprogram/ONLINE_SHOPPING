@@ -43,6 +43,7 @@ public class RegGUI extends JFrame {
                     fw.close();
                     Frame frame = new JFrame();
                     JOptionPane.showMessageDialog(frame, "Registered Successfully");
+                    dispose();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
