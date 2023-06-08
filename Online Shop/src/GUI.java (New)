@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +18,7 @@ public class GUI implements ActionListener {
     private static JPasswordField passwordText;
     private static JButton button;
     private static JLabel success;
+    private static JButton regButton;
 
     public static void main(String[] args) {
         JPanel panel = new JPanel();
@@ -26,7 +28,7 @@ public class GUI implements ActionListener {
         frame.add(panel);
 
         panel.setLayout(null);
-
+//User & Password Label
         userLabel = new JLabel("Username");
         userLabel.setBounds(10, 20, 80, 25);
         panel.add(userLabel);
@@ -42,11 +44,35 @@ public class GUI implements ActionListener {
         passwordText = new JPasswordField();
         passwordText.setBounds(100, 50, 165, 25);
         panel.add(passwordText);
-
+//Buttons
         button = new JButton("Login");
         button.setBounds(10, 80, 80, 25);
         button.addActionListener(new GUI());
+        regButton= new JButton("Register");
+        regButton.setBounds(10, 110, 80, 25);
         panel.add(button);
+        panel.add(regButton);
+
+//Action Listenr for registerbutton
+
+        regButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae){
+
+                RegGUI regGUI = new RegGUI();
+
+                regGUI.setVisible(true);
+                regGUI.setBounds(200,200,500,350);
+                new RegGUI();
+
+
+
+                
+                frame.dispose();
+            }
+            
+
+
+        });
 
         success = new JLabel("");
         success.setBounds(10, 110, 300, 25);
