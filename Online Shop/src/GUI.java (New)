@@ -1,10 +1,14 @@
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -16,13 +20,14 @@ public class GUI implements ActionListener {
     private static JTextField userText;
     private static JLabel passwordLabel;
     private static JPasswordField passwordText;
-    private static JButton button;
+    private static JButton logButton;
     private static JLabel success;
     private static JButton regButton;
+    private static JFrame frame;
 
     public static void main(String[] args) {
         JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setSize(500, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
@@ -45,15 +50,23 @@ public class GUI implements ActionListener {
         passwordText.setBounds(100, 50, 165, 25);
         panel.add(passwordText);
 //Buttons
-        button = new JButton("Login");
-        button.setBounds(10, 80, 80, 25);
-        button.addActionListener(new GUI());
+        logButton = new JButton("Login");
+        logButton.setBounds(10, 80, 80, 25);
+        logButton.addActionListener(new GUI());
+
         regButton= new JButton("Register");
         regButton.setBounds(10, 110, 80, 25);
-        panel.add(button);
+
+        panel.add(logButton);
         panel.add(regButton);
 
-//Action Listenr for registerbutton
+        success = new JLabel("");
+        success.setBounds(10, 110, 300, 25);
+        panel.add(success);
+
+        frame.setVisible(true);
+
+//Action Listenr for regbutton
 
         regButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae){
@@ -62,42 +75,45 @@ public class GUI implements ActionListener {
 
                 regGUI.setVisible(true);
                 regGUI.setBounds(200,200,500,350);
-                new RegGUI();
-
-
-
-                
+                new RegGUI();   
                 frame.dispose();
             }
-            
-
 
         });
-
-        success = new JLabel("");
-        success.setBounds(10, 110, 300, 25);
-        panel.add(success);
-
-        frame.setVisible(true);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        String user = userText.getText();
-        String password = new String(passwordText.getPassword());
+    public void actionPerformed(ActionEvent ae) {
+        boolean matched = false;
+        String user = userText.getText().toString();
+        String password = passwordText.getText().toString();
 
-        if (user.equals("Anne") && password.equals("123")) {
-            success.setText("User login successful!");
+        try{
+        FileReader fr = new FileReader("data.txt");
+        BufferedReader br = new BufferedReader(fr);
+        String line;
+        while((line=br.readLine())!=null){
+            if(line.equals(user+ "\t" + password)){
 
-            // Open the user window
-            SwingUtilities.invokeLater(() -> new MainFrame());
-        } else if (user.equals("admin") && password.equals("secret")) {
-            success.setText("Admin login successful!");
-
-            // Open the admin window
-            SwingUtilities.invokeLater(() -> new AdminFrame());
-        } else {
-            success.setText("Login failed!");
+                matched = true;
+                break;
+            }
         }
+        fr.close();
+    }catch(Exception e){}
+        if(matched){
+
+            frame.dispose();
+            new MainFrame();
+        }
+        else{
+            Frame frame1 = new JFrame();
+                    JOptionPane.showMessageDialog(frame1, "Invalid Username or Password");
+                    frame1.dispose();
+
+
+
+        }
+        
     }
 }
