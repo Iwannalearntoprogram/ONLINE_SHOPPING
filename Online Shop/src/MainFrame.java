@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
 		contentPane = new JPanel(new BorderLayout()) {
 	        @Override public void paintComponent(Graphics g) {
 	            try {
-					g.drawImage(ImageIO.read(new File("./src/Background.png")), 0, 0, null);
+					g.drawImage(ImageIO.read(new File("Background.png")), 0, 0, null);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -75,8 +75,8 @@ public class MainFrame extends JFrame {
 		
 		
 
-        ImageIcon bread = new ImageIcon("./src/Bread.png");
-        ImageIcon chocolate = new ImageIcon("./src/Chocolate.png");
+        ImageIcon bread = new ImageIcon("Bread.png");
+        ImageIcon chocolate = new ImageIcon("Chocolate.png");
         
 		breadButton = new CustomButton();
     	breadButton.setIcon(bread);
