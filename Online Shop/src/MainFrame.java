@@ -1,113 +1,137 @@
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 
 public class MainFrame extends JFrame {
+    private JPanel productPanel;
+    private JButton deliverButton;
+    private JButton searchButton;
+    private JButton cartButton;
+    private JLabel breadLabel;
+    private JButton breadMinusButton;
+    private JButton breadPlusButton;
+    private JLabel chocolateLabel;
+    private JButton chocolateMinusButton;
+    private JButton chocolatePlusButton;
+    private JLabel ramenLabel;
+    private JButton ramenMinusButton;
+    private JButton ramenPlusButton;
 
-	private JPanel contentPane;
-	private JPanel mainPane;
-	private JButton cartButton;
-	private JButton breadButton;
-	private JLabel titleLabel;
-
-	
-	public MainFrame() {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1100, 943); 
-        setLocationRelativeTo(null);
-        setResizable(false);
+    public MainFrame() {
         setTitle("NAOIMISE");
-		
-		mainPane = new JPanel();	
-		mainPane.setOpaque(false);
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
-		mainPane.setPreferredSize(new Dimension(700,440));
-		mainPane.setMinimumSize(mainPane.getPreferredSize());
-		mainPane.setMaximumSize(mainPane.getPreferredSize());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1100, 943);
+        setResizable(false);
+        setLayout(null);
 
-		titleLabel = new JLabel("NAOIMISE");
-		titleLabel.setOpaque(false);
-		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		titleLabel.setFont(new Font("joystix monospace", Font.PLAIN, 50));
+        // Create a background label with the specified image
+        ImageIcon backgroundImage = new ImageIcon("Background.png");
+        JLabel backgroundLabel = new JLabel(backgroundImage);
+        backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
+        add(backgroundLabel);
 
-		Box box = new Box(BoxLayout.Y_AXIS);
-		box.add(Box.createVerticalGlue());
-		box.add(mainPane);
-		box.add(Box.createVerticalGlue());
-		
-		Dimension buttonSize = new Dimension(200,50);
-		
-		cartButton = new CustomButton();
-		cartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		cartButton.setText("CART");
-		cartButton.setPreferredSize(buttonSize);
-		cartButton.setMinimumSize(buttonSize);
-		cartButton.setMaximumSize(buttonSize);
-		
-		breadButton = new CustomButton();
-		breadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		breadButton.setPreferredSize(new Dimension(200,200));
-		breadButton.setMinimumSize(breadButton.getPreferredSize());
-		breadButton.setMaximumSize(breadButton.getPreferredSize());
-            
+        // Create and customize the title label
+        JLabel titleLabel = new JLabel("NAOIMISE");
+        titleLabel.setBounds(0, 20, getWidth(), 50);
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        titleLabel.setFont(new Font("joystix monospace", Font.BOLD, 50));
+        backgroundLabel.add(titleLabel);
 
-		try {
+        // Create the product panel and set its properties
+        productPanel = new JPanel();
+        // Using absolute positioning
+        productPanel.setLayout(null);
+        // Transparent panel
+        productPanel.setOpaque(false);
+        productPanel.setBounds(100, 200, getWidth() - 200, getHeight() - 300);
+        backgroundLabel.add(productPanel);
 
-			Image backgroundImage = ImageIO.read(new File("./src/Background.png"));
-		    ImageIcon breadIcon = new ImageIcon("./src/Bread.png");
-		    ImageIcon chocolateIcon = new ImageIcon("./src/Chocolate.png");
+        // Create and customize the buttons
+        deliverButton = new JButton("Deliver");
+        deliverButton.setBounds(20, 100, 200, 50);
+        backgroundLabel.add(deliverButton);
 
-		    
-			contentPane = new JPanel(new BorderLayout()) {
-		        @Override public void paintComponent(Graphics g) {
-		            super.paintComponent(g);
-		            g.drawImage(backgroundImage, 0, 0, null);
-		        }
-			};
-			
+        // Create a regular button for search
+        searchButton = new JButton("SEARCH");
+        searchButton.setBounds(getWidth() - 220, 100, 200, 50);
+        searchButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
+        backgroundLabel.add(searchButton);
 
-		    breadButton.setIcon(breadIcon);
-		    // Set the chocolate button icon on mouse click
-		    breadButton.addMouseListener(new MouseAdapter() {
-		        @Override
-		        public void mouseClicked(MouseEvent e) {
-		            super.mouseClicked(e);
-		            breadButton.setIcon(chocolateIcon);
-		        }
+        cartButton = new JButton("Cart");
+        cartButton.setBounds(getWidth() - 220, 160, 200, 50);
+        backgroundLabel.add(cartButton);
 
-		        @Override
-		        public void mouseExited(MouseEvent e) {
-		            super.mouseExited(e);
-		            breadButton.setIcon(breadIcon);
-		        }
-		    });
+        breadLabel = new JLabel(new ImageIcon("Bread.png"));
+        breadMinusButton = new JButton("-");
+        breadPlusButton = new JButton("+");
+        customizeProductButton(breadLabel, breadMinusButton, breadPlusButton);
 
+        chocolateLabel = new JLabel(new ImageIcon("Chocolate.png"));
+        chocolateMinusButton = new JButton("-");
+        chocolatePlusButton = new JButton("+");
+        customizeProductButton(chocolateLabel, chocolateMinusButton, chocolatePlusButton);
 
+        ramenLabel = new JLabel(new ImageIcon("Ramen.png"));
+        ramenMinusButton = new JButton("-");
+        ramenPlusButton = new JButton("+");
+        customizeProductButton(ramenLabel, ramenMinusButton, ramenPlusButton);
 
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    contentPane = new JPanel(new BorderLayout());
-		}
-		
+        // Set the position and size of the components
+        int buttonWidth = 270;
+        int buttonHeight = 220;
+        int buttonSpacing = 10;
+        int productPanelWidth = productPanel.getWidth();
+        int productPanelHeight = productPanel.getHeight();
+        int startX = (productPanelWidth - buttonWidth) / 2;
+        int startY = (productPanelHeight - (3 * buttonHeight + 2 * buttonSpacing)) / 2;
+        int currentY = startY;
 
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		            
-    	
-		mainPane.add(titleLabel);
-		mainPane.add(Box.createRigidArea(new Dimension(0,100)));
-		mainPane.add(cartButton);
-		mainPane.add(Box.createRigidArea(new Dimension(0,20)));
-		mainPane.add(breadButton);
-		mainPane.add(Box.createRigidArea(new Dimension(0,20)));
-		
-		contentPane.add(box, BorderLayout.CENTER);
+        breadLabel.setBounds(startX, currentY, buttonWidth, buttonHeight);
+        breadMinusButton.setBounds(startX + buttonWidth + buttonSpacing, currentY, 70, buttonHeight);
+        breadPlusButton.setBounds(startX + buttonWidth + buttonSpacing + 60 + buttonSpacing, currentY, 70, buttonHeight);
+        productPanel.add(breadLabel);
+        productPanel.add(breadMinusButton);
+        productPanel.add(breadPlusButton);
 
-		setContentPane(contentPane);
+        currentY += buttonHeight + buttonSpacing;
 
-	
-	}
+        chocolateLabel.setBounds(startX, currentY, buttonWidth, buttonHeight);
+        chocolateMinusButton.setBounds(startX + buttonWidth + buttonSpacing, currentY, 70, buttonHeight);
+        chocolatePlusButton.setBounds(startX + buttonWidth + buttonSpacing + 60 + buttonSpacing, currentY, 70, buttonHeight);
+        productPanel.add(chocolateLabel);
+        productPanel.add(chocolateMinusButton);
+        productPanel.add(chocolatePlusButton);
 
+        currentY += buttonHeight + buttonSpacing;
+
+        ramenLabel.setBounds(startX, currentY, buttonWidth, buttonHeight);
+        ramenMinusButton.setBounds(startX + buttonWidth + buttonSpacing, currentY, 70, buttonHeight);
+        ramenPlusButton.setBounds(startX + buttonWidth + buttonSpacing + 60 + buttonSpacing, currentY, 70, buttonHeight);
+        productPanel.add(ramenLabel);
+        productPanel.add(ramenMinusButton);
+        productPanel.add(ramenPlusButton);
+
+        setVisible(true);
+    }
+
+    private void customizeProductButton(JLabel productLabel, JButton minusButton, JButton plusButton) {
+        productLabel.setPreferredSize(new Dimension(200, 200));
+        minusButton.setPreferredSize(new Dimension(50, 50));
+        plusButton.setPreferredSize(new Dimension(50, 50));
+        productLabel.setFont(new Font("joystix monospace", Font.BOLD, 50));
+        minusButton.setFont(new Font("joystix monospace", Font.BOLD, 50));
+        plusButton.setFont(new Font("joystix monospace", Font.BOLD, 50));
+        Color buttonColor = new Color(255, 255, 255);
+        minusButton.setBackground(buttonColor);
+        plusButton.setBackground(buttonColor);
+    }
+
+    public static void main(String[] args) {
+        new MainFrame();
+    }
 }
