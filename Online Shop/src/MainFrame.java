@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
 public class MainFrame extends JFrame {
@@ -44,9 +45,7 @@ public class MainFrame extends JFrame {
 
         // Create the product panel and set its properties
         productPanel = new JPanel();
-        // Using absolute positioning
-        productPanel.setLayout(null);
-        // Transparent panel
+        productPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Set FlowLayout for horizontal and centered positioning
         productPanel.setOpaque(false);
         productPanel.setBounds(100, 200, getWidth() - 200, getHeight() - 300);
         backgroundLabel.add(productPanel);
@@ -56,7 +55,6 @@ public class MainFrame extends JFrame {
         deliverButton.setBounds(20, 100, 200, 50);
         backgroundLabel.add(deliverButton);
 
-        // Create a regular button for search
         searchButton = new JButton("SEARCH");
         searchButton.setBounds(getWidth() - 220, 100, 200, 50);
         searchButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
@@ -81,57 +79,64 @@ public class MainFrame extends JFrame {
         ramenPlusButton = new JButton("+");
         customizeProductButton(ramenLabel, ramenMinusButton, ramenPlusButton);
 
-        // Set the position and size of the components
-        int buttonWidth = 270;
-        int buttonHeight = 220;
-        int buttonSpacing = 10;
-        int productPanelWidth = productPanel.getWidth();
-        int productPanelHeight = productPanel.getHeight();
-        int startX = (productPanelWidth - buttonWidth) / 2;
-        int startY = (productPanelHeight - (3 * buttonHeight + 2 * buttonSpacing)) / 2;
-        int currentY = startY;
+        // Adjust dimensions and positions for the product elements
+        int labelWidth = 220;
+        int labelHeight = 180;
+        int buttonWidth = 60;
+        int buttonHeight = 50;
 
-        breadLabel.setBounds(startX, currentY, buttonWidth, buttonHeight);
-        breadMinusButton.setBounds(startX + buttonWidth + buttonSpacing, currentY, 70, buttonHeight);
-        breadPlusButton.setBounds(startX + buttonWidth + buttonSpacing + 60 + buttonSpacing, currentY, 70, buttonHeight);
-        productPanel.add(breadLabel);
-        productPanel.add(breadMinusButton);
-        productPanel.add(breadPlusButton);
+        breadLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
+        breadMinusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        breadPlusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
 
-        currentY += buttonHeight + buttonSpacing;
+        chocolateLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
+        chocolateMinusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        chocolatePlusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
 
-        chocolateLabel.setBounds(startX, currentY, buttonWidth, buttonHeight);
-        chocolateMinusButton.setBounds(startX + buttonWidth + buttonSpacing, currentY, 70, buttonHeight);
-        chocolatePlusButton.setBounds(startX + buttonWidth + buttonSpacing + 60 + buttonSpacing, currentY, 70, buttonHeight);
-        productPanel.add(chocolateLabel);
-        productPanel.add(chocolateMinusButton);
-        productPanel.add(chocolatePlusButton);
+        // Create separate panels for bread and chocolate labels along with their buttons
+        JPanel breadPanel = new JPanel();
+        breadPanel.setOpaque(false);
+        breadPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        breadPanel.add(breadLabel);
+        breadPanel.add(breadMinusButton);
+        breadPanel.add(breadPlusButton);
 
-        currentY += buttonHeight + buttonSpacing;
+        JPanel chocolatePanel = new JPanel();
+        chocolatePanel.setOpaque(false);
+        chocolatePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        chocolatePanel.add(chocolateLabel);
+        chocolatePanel.add(chocolateMinusButton);
+        chocolatePanel.add(chocolatePlusButton);
 
-        ramenLabel.setBounds(startX, currentY, buttonWidth, buttonHeight);
-        ramenMinusButton.setBounds(startX + buttonWidth + buttonSpacing, currentY, 70, buttonHeight);
-        ramenPlusButton.setBounds(startX + buttonWidth + buttonSpacing + 60 + buttonSpacing, currentY, 70, buttonHeight);
-        productPanel.add(ramenLabel);
-        productPanel.add(ramenMinusButton);
-        productPanel.add(ramenPlusButton);
+        // Create a separate panel for the ramen label and its buttons
+        JPanel ramenPanel = new JPanel();
+        ramenPanel.setOpaque(false);
+        ramenPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        ramenPanel.add(ramenLabel);
+        ramenPanel.add(ramenMinusButton);
+        ramenPanel.add(ramenPlusButton);
+
+        // Add the product elements to the product panel
+        productPanel.add(breadPanel);
+        productPanel.add(chocolatePanel);
+        productPanel.add(ramenPanel);
 
         setVisible(true);
     }
 
     private void customizeProductButton(JLabel productLabel, JButton minusButton, JButton plusButton) {
-        productLabel.setPreferredSize(new Dimension(200, 200));
-        minusButton.setPreferredSize(new Dimension(50, 50));
-        plusButton.setPreferredSize(new Dimension(50, 50));
-        productLabel.setFont(new Font("joystix monospace", Font.BOLD, 50));
-        minusButton.setFont(new Font("joystix monospace", Font.BOLD, 50));
-        plusButton.setFont(new Font("joystix monospace", Font.BOLD, 50));
-        Color buttonColor = new Color(255, 255, 255);
-        minusButton.setBackground(buttonColor);
-        plusButton.setBackground(buttonColor);
-    }
+    productLabel.setFont(new Font("joystix monospace", Font.BOLD, 40));
+    minusButton.setFont(new Font("joystix monospace", Font.BOLD, 30)); // Adjusted font size
+    plusButton.setFont(new Font("joystix monospace", Font.BOLD, 30)); // Adjusted font size
+    Color buttonColor = new Color(255, 255, 255);
+    minusButton.setBackground(buttonColor);
+    plusButton.setBackground(buttonColor);
+    minusButton.setPreferredSize(new Dimension(60, 50)); // Fixed button size
+    plusButton.setPreferredSize(new Dimension(60, 50)); // Fixed button size
+}
 
     public static void main(String[] args) {
         new MainFrame();
     }
 }
+
