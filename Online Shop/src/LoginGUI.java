@@ -37,7 +37,7 @@ public class LoginGUI implements ActionListener {
 		contentPane = new JPanel(new BorderLayout()) {
 	        @Override public void paintComponent(Graphics g) {
 	            try {
-					g.drawImage(ImageIO.read(new File("./src/Background.png")), 0, 0, null);
+					g.drawImage(ImageIO.read(new File("Background.png")), 0, 0, null);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -50,7 +50,7 @@ public class LoginGUI implements ActionListener {
 		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
 		
 
-		var buttonSize = new Dimension(300,50);
+		Dimension buttonSize = new Dimension(300,50);
 		
 		titleLabel = new JLabel("LOGIN");
 		titleLabel.setOpaque(false);
@@ -84,6 +84,7 @@ public class LoginGUI implements ActionListener {
         logButton = new CustomButton();
         logButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         logButton.setText("Login");
+		logButton.setFont(new Font("joystix monospace", Font.PLAIN, 18));
         logButton.setPreferredSize(buttonSize);
         logButton.setMinimumSize(buttonSize);
         logButton.setMaximumSize(buttonSize);
@@ -93,6 +94,7 @@ public class LoginGUI implements ActionListener {
 		regButton = new CustomButton();
 		regButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		regButton.setText("Register");
+		regButton.setFont(new Font("joystix monospace", Font.PLAIN, 18));
 		regButton.setPreferredSize(buttonSize);
 		regButton.setMinimumSize(buttonSize);
 		regButton.setMaximumSize(buttonSize);
