@@ -246,65 +246,71 @@ private void customizeProductButton(JLabel productLabel, JButton minusButton, JB
 
 	//Delivery Frame
 	private void DeliverWindow() {
+    JFrame deliverFrame = new JFrame("Delivery Details");
+    deliverFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    deliverFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+    deliverFrame.setSize(500, 500);
+    deliverFrame.setLayout(new BorderLayout());
 
-		
-        JFrame deliverFrame = new JFrame("Search Products");
-        deliverFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        deliverFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
-        deliverFrame.setSize(1100, 900);
-		deliverFrame.setResizable(true);
-        deliverFrame.setLayout(new FlowLayout());
+    // Create a JTextArea to display the cart content
+    JTextArea cartTextArea = new JTextArea(10, 20);
+    cartTextArea.setEditable(false);
+    JScrollPane cartScrollPane = new JScrollPane(cartTextArea);
 
-		JLabel firstNameLabel = new JLabel("First Name:");
-		JTextField firstNameField;
-        firstNameField = new JTextField(15);
+    // Create other components for delivery details
+    JLabel firstNameLabel = new JLabel("First Name:");
+    JTextField firstNameField = new JTextField(15);
+    JLabel lastNameLabel = new JLabel("Last Name:");
+    JTextField lastNameField = new JTextField(15);
+    JLabel addressLabel = new JLabel("Address:");
+    JTextField addressField = new JTextField(15);
+    JLabel cardNumberLabel = new JLabel("Card Number:");
+    JTextField cardNumberField = new JTextField(15);
+    JButton payButton = new JButton("Pay");
 
-        JLabel lastNameLabel = new JLabel("Last Name:");
-		JTextField lastNameField;
-        lastNameField = new JTextField(15);
+    // Add components to the deliverFrame
+    JPanel deliveryPanel = new JPanel();
+    deliveryPanel.setLayout(new GridLayout(6, 2));
+    deliveryPanel.add(firstNameLabel);
+    deliveryPanel.add(firstNameField);
+    deliveryPanel.add(lastNameLabel);
+    deliveryPanel.add(lastNameField);
+    deliveryPanel.add(addressLabel);
+    deliveryPanel.add(addressField);
+    deliveryPanel.add(cardNumberLabel);
+    deliveryPanel.add(cardNumberField);
+    deliveryPanel.add(new JLabel()); // empty label for spacing
+    deliveryPanel.add(payButton);
 
-		JLabel addressLabel= new JLabel("Address");
-		JTextField addressField;
-		addressField = new JTextField(15);
+    deliverFrame.add(cartScrollPane, BorderLayout.NORTH);
+    deliverFrame.add(deliveryPanel, BorderLayout.CENTER);
 
-        JLabel cardNumberLabel = new JLabel("Card Number:");
-		JTextField cardNumberField;
-        cardNumberField = new JTextField(15);
+    // Display the cart content in the JTextArea
+    StringBuilder cartContent = new StringBuilder();
+    for (String item : shoppingCart) {
+        cartContent.append(item).append("\n");
+    }
+    cartTextArea.setText(cartContent.toString());
 
-		
-        JButton payButton = new JButton("Pay");
-        
+    deliverFrame.setVisible(true);
 
-        deliverFrame.add(firstNameLabel);
-        deliverFrame.add(firstNameField);
-        deliverFrame.add(lastNameLabel);
-        deliverFrame.add(lastNameField);
-        deliverFrame.add(cardNumberLabel);
-        deliverFrame.add(cardNumberField);
-		deliverFrame.add(addressLabel);
-		deliverFrame.add(addressField);
-        deliverFrame.add(payButton);
+    payButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == payButton) {
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String cardNumber = cardNumberField.getText();
 
-       	deliverFrame.pack();
-        deliverFrame.setVisible(true);
+                // Perform payment processing or save user information
+                // You can add your payment logic or database storage code here
 
-		payButton.addActionListener(new ActionListener() {
-			public  void actionPerformed(ActionEvent ae){
-				if (ae.getSource() == payButton) {
-            String firstName = firstNameField.getText();
-            String lastName = lastNameField.getText();
-            String cardNumber = cardNumberField.getText();
+                JOptionPane.showMessageDialog(deliverFrame, "Payment Successful!\nThank you, " + firstName + " " + lastName + "!");
+            }
+        }
+    });
+}
 
-            // Perform payment processing or save user information
-            // You can add your payment logic or database storage code here
-
-            JOptionPane.showMessageDialog(deliverFrame, "Payment Successful!\nThank you, " + firstName + " " + lastName + "!");
-
-
-				}	
-			}
-		});
-	}
+	
 
 
 
