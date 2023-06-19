@@ -1,18 +1,12 @@
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
     private JPanel productPanel;
@@ -28,10 +22,13 @@ public class MainFrame extends JFrame {
     private JLabel ramenLabel;
     private JButton ramenMinusButton;
     private JButton ramenPlusButton;
-
+	private JLabel cartSizeLabel;
+	private ArrayList<String> shoppingCart;
     private Map<String, ImageIcon> productImages;
-
+	
+//MainFrame
     public MainFrame() {
+
         setTitle("NAOIMISE");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1100, 943);
@@ -76,6 +73,7 @@ public class MainFrame extends JFrame {
 
         breadLabel = new JLabel(new ImageIcon("Bread.png"));
         breadMinusButton = new JButton("-");
+
         breadPlusButton = new JButton("+");
         breadMinusButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
         breadPlusButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
@@ -143,6 +141,30 @@ public class MainFrame extends JFrame {
         productImages.put("Chocolate", new ImageIcon("Chocolate.png"));
         productImages.put("Ramen", new ImageIcon("Ramen.png"));
 
+		//Cart frame
+		cartSizeLabel = new JLabel("Cart Size: 0");
+		cartSizeLabel.setBounds(20, 160, 200, 50);
+		cartSizeLabel.setFont(new Font("joystix monospace", Font.BOLD, 20));
+		backgroundLabel.add(cartSizeLabel);
+
+		//Initialize Shopping cart
+
+		shoppingCart = new ArrayList<>();
+
+		//Add Action Listener to Cart Button
+		cartButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent a){
+					showCartDialog();
+		}
+		});
+
+		//Add action listener to deliver Button
+		deliverButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae){
+				 	DeliverWindow();
+			}
+		});
+
         // Add action listener to the search button
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -152,19 +174,124 @@ public class MainFrame extends JFrame {
         });
 
         setVisible(true);
-    }
 
-    private void customizeProductButton(JLabel productLabel, JButton minusButton, JButton plusButton) {
-        productLabel.setFont(new Font("joystix monospace", Font.BOLD, 40));
-        productLabel.setForeground(Color.WHITE); // Set label text color
-        minusButton.setFont(new Font("joystix monospace", Font.BOLD, 30));
-        plusButton.setFont(new Font("joystix monospace", Font.BOLD, 30));
-        Color buttonColor = new Color(255, 255, 255);
-        minusButton.setBackground(buttonColor);
-        plusButton.setBackground(buttonColor);
-        minusButton.setPreferredSize(new Dimension(60, 50));
-        plusButton.setPreferredSize(new Dimension(60, 50));
+		//method to add to cart
+    }private void addToCart(String product){
+		shoppingCart.add(product);
+		updateCartSizeLabel();
+
+		//updates the cart
+	}private void updateCartSizeLabel(){
+		cartSizeLabel.setText("Cart Size: " + shoppingCart.size());
+
+		//shows Item and displays the updated Cart
+	}private void showCartDialog() {
+    StringBuilder cartContent = new StringBuilder();
+    for (String item : shoppingCart) {
+        cartContent.append(item).append("\n");
     }
+    JOptionPane.showMessageDialog(MainFrame.this, cartContent.toString(), "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
+
+		//remove from cart
+} private void removeFromCart(String product){
+	shoppingCart.remove(product);
+	updateCartSizeLabel();
+
+}
+		// Custom Buttons
+private void customizeProductButton(JLabel productLabel, JButton minusButton, JButton plusButton) {
+    productLabel.setFont(new Font("joystix monospace", Font.BOLD, 40));
+    productLabel.setForeground(Color.WHITE); // Set label text color
+    minusButton.setFont(new Font("joystix monospace", Font.BOLD, 30));
+    plusButton.setFont(new Font("joystix monospace", Font.BOLD, 30));
+    Color buttonColor = new Color(255, 255, 255);
+    minusButton.setBackground(buttonColor);
+    plusButton.setBackground(buttonColor);
+
+ 	plusButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            addToCart(productLabel.getText());
+        }
+    });
+
+    minusButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            removeFromCart(productLabel.getText());
+        }
+    });
+
+    minusButton.setPreferredSize(new Dimension(60, 50));
+    plusButton.setPreferredSize(new Dimension(60, 50));
+}
+
+	
+
+	//Delivery Frame
+	private void DeliverWindow() {
+
+		
+        JFrame deliverFrame = new JFrame("Search Products");
+        deliverFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        deliverFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+        deliverFrame.setSize(1100, 900);
+		deliverFrame.setResizable(true);
+        deliverFrame.setLayout(new FlowLayout());
+
+		JLabel firstNameLabel = new JLabel("First Name:");
+		JTextField firstNameField;
+        firstNameField = new JTextField(15);
+
+        JLabel lastNameLabel = new JLabel("Last Name:");
+		JTextField lastNameField;
+        lastNameField = new JTextField(15);
+
+		JLabel addressLabel= new JLabel("Address");
+		JTextField addressField;
+		addressField = new JTextField(15);
+
+        JLabel cardNumberLabel = new JLabel("Card Number:");
+		JTextField cardNumberField;
+        cardNumberField = new JTextField(15);
+
+		
+        JButton payButton = new JButton("Pay");
+        
+
+        deliverFrame.add(firstNameLabel);
+        deliverFrame.add(firstNameField);
+        deliverFrame.add(lastNameLabel);
+        deliverFrame.add(lastNameField);
+        deliverFrame.add(cardNumberLabel);
+        deliverFrame.add(cardNumberField);
+		deliverFrame.add(addressLabel);
+		deliverFrame.add(addressField);
+        deliverFrame.add(payButton);
+
+       	deliverFrame.pack();
+        deliverFrame.setVisible(true);
+
+		payButton.addActionListener(new ActionListener() {
+			public  void actionPerformed(ActionEvent ae){
+				if (ae.getSource() == payButton) {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String cardNumber = cardNumberField.getText();
+
+            // Perform payment processing or save user information
+            // You can add your payment logic or database storage code here
+
+            JOptionPane.showMessageDialog(deliverFrame, "Payment Successful!\nThank you, " + firstName + " " + lastName + "!");
+
+
+				}	
+			}
+		});
+	}
+
+
+
 
     private void showSearchWindow() {
         JFrame searchFrame = new JFrame("Search Products");
@@ -201,6 +328,10 @@ public class MainFrame extends JFrame {
                 }
             }
         });
+
+		
+
+
         
         // Add components to the search frame
         searchFrame.add(searchLabel);
@@ -210,7 +341,7 @@ public class MainFrame extends JFrame {
         searchFrame.setVisible(true);
     }
 
-    // public static void main(String[] args) {
-    //     new MainFrame();
-    // }
+    //  public static void main(String[] args) {
+    //      new MainFrame();
+    //  }
 }
