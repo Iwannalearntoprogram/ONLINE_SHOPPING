@@ -71,22 +71,38 @@ public class MainFrame extends JFrame {
         cartButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
         backgroundLabel.add(cartButton);
 
-        breadLabel = new JLabel(new ImageIcon("Bread.png"));
-        breadMinusButton = new JButton("-");
+		breadLabel = new JLabel("Bread");
+		ImageIcon bread = new ImageIcon("Bread.png");
+		breadLabel.setIcon(bread);
 
+        // breadLabel = new JLabel(new ImageIcon("Bread.png"));
+
+        breadMinusButton = new JButton("-");
         breadPlusButton = new JButton("+");
         breadMinusButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
         breadPlusButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
         customizeProductButton(breadLabel, breadMinusButton, breadPlusButton);
 
-        chocolateLabel = new JLabel(new ImageIcon("Chocolate.png"));
+		chocolateLabel = new JLabel("Chocolate");
+		ImageIcon chocolate = new ImageIcon("Chocolate.png");
+		chocolateLabel.setIcon(chocolate);
+
+
+        // chocolateLabel = new JLabel(new ImageIcon("Chocolate.png"));
+
         chocolateMinusButton = new JButton("-");
         chocolatePlusButton = new JButton("+");
         chocolateMinusButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
         chocolatePlusButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
         customizeProductButton(chocolateLabel, chocolateMinusButton, chocolatePlusButton);
 
-        ramenLabel = new JLabel(new ImageIcon("Ramen.png"));
+		ramenLabel = new JLabel("Ramen");
+		ImageIcon ramen = new ImageIcon("Ramen.png");
+		ramenLabel.setIcon(ramen);
+
+
+
+     
         ramenMinusButton = new JButton("-");
         ramenPlusButton = new JButton("+");
         ramenMinusButton.setFont(new Font("joystix monospace", Font.BOLD, 20));
