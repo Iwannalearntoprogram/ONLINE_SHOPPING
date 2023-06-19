@@ -245,7 +245,7 @@ private void customizeProductButton(JLabel productLabel, JButton minusButton, JB
 	
 
 	//Delivery Frame
-	private void DeliverWindow() {
+private void DeliverWindow() {
     JFrame deliverFrame = new JFrame("Delivery Details");
     deliverFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     deliverFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
@@ -264,21 +264,44 @@ private void customizeProductButton(JLabel productLabel, JButton minusButton, JB
     JTextField lastNameField = new JTextField(15);
     JLabel addressLabel = new JLabel("Address:");
     JTextField addressField = new JTextField(15);
-    JLabel cardNumberLabel = new JLabel("Card Number:");
-    JTextField cardNumberField = new JTextField(15);
+    JLabel paymentMethodLabel = new JLabel("Payment Method:");
+    String[] paymentMethods = {"Credit Card", "PayPal", "Cash on Delivery"};
+    JComboBox<String> paymentMethodComboBox = new JComboBox<>(paymentMethods);
     JButton payButton = new JButton("Pay");
+
+    // Add action listener to the pay button
+    payButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == payButton) {
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String selectedPaymentMethod = (String) paymentMethodComboBox.getSelectedItem();
+
+                // Perform payment processing or save user information based on the selected payment method
+                if (selectedPaymentMethod.equals("Credit Card")) {
+                    openCreditCardWindow();
+                } else if (selectedPaymentMethod.equals("PayPal")) {
+					openPayPalWindow();
+                } else if (selectedPaymentMethod.equals("Cash on Delivery")) {
+                    openCODWindow();
+
+                }
+
+            }
+        }
+    });
 
     // Add components to the deliverFrame
     JPanel deliveryPanel = new JPanel();
-    deliveryPanel.setLayout(new GridLayout(6, 2));
+    deliveryPanel.setLayout(new GridLayout(7, 2));
     deliveryPanel.add(firstNameLabel);
     deliveryPanel.add(firstNameField);
     deliveryPanel.add(lastNameLabel);
     deliveryPanel.add(lastNameField);
     deliveryPanel.add(addressLabel);
     deliveryPanel.add(addressField);
-    deliveryPanel.add(cardNumberLabel);
-    deliveryPanel.add(cardNumberField);
+    deliveryPanel.add(paymentMethodLabel);
+    deliveryPanel.add(paymentMethodComboBox);
     deliveryPanel.add(new JLabel()); // empty label for spacing
     deliveryPanel.add(payButton);
 
@@ -293,23 +316,110 @@ private void customizeProductButton(JLabel productLabel, JButton minusButton, JB
     cartTextArea.setText(cartContent.toString());
 
     deliverFrame.setVisible(true);
+}
 
-    payButton.addActionListener(new ActionListener() {
+// Function to open a new window for credit card details
+private void openCreditCardWindow() {
+    JFrame creditCardFrame = new JFrame("Credit Card Details");
+    creditCardFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    creditCardFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+    creditCardFrame.setSize(400, 200);
+    creditCardFrame.setLayout(new GridLayout(3, 2));
+
+    JLabel cardNumberLabel = new JLabel("Card Number:");
+    JTextField cardNumberField = new JTextField(15);
+    JLabel expiryDateLabel = new JLabel("Expiry Date:");
+    JTextField expiryDateField = new JTextField(7);
+
+    JButton confirmButton = new JButton("Confirm");
+
+    confirmButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
-            if (ae.getSource() == payButton) {
-                String firstName = firstNameField.getText();
-                String lastName = lastNameField.getText();
+            if (ae.getSource() == confirmButton) {
                 String cardNumber = cardNumberField.getText();
 
-                // Perform payment processing or save user information
-                // You can add your payment logic or database storage code here
+                JOptionPane.showMessageDialog(creditCardFrame, "Payment Successful!\nThank you!");
 
-                JOptionPane.showMessageDialog(deliverFrame, "Payment Successful!\nThank you, " + firstName + " " + lastName + "!");
+                creditCardFrame.dispose(); // Close the credit card details window
             }
         }
     });
-}
 
+    creditCardFrame.add(cardNumberLabel);
+    creditCardFrame.add(cardNumberField);
+    creditCardFrame.add(expiryDateLabel);
+    creditCardFrame.add(expiryDateField);
+    creditCardFrame.add(new JLabel());
+    creditCardFrame.add(confirmButton);
+
+    creditCardFrame.setVisible(true);
+}
+private void openPayPalWindow() {
+    JFrame PPFrame = new JFrame("PAYPAL Details");
+    PPFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    PPFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+   	PPFrame.setSize(400, 200);
+    PPFrame.setLayout(new GridLayout(3, 2));
+
+    JLabel PhoneNumberLabel = new JLabel("Phone Number:");
+    JTextField PhoneNumberField = new JTextField(15);
+    
+    JButton confirmButton = new JButton("Confirm");
+
+    confirmButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == confirmButton) {
+                String PhoneNumber = PhoneNumberField.getText();
+                
+
+              
+                JOptionPane.showMessageDialog(PPFrame, "Payment Successful!\nThank you!");
+
+                PPFrame.dispose(); // Close the PayPal details window
+            }
+        }
+    });
+
+    PPFrame.add(PhoneNumberLabel);
+    PPFrame.add(PhoneNumberField);
+    PPFrame.add(new JLabel());
+   	PPFrame.add(confirmButton);
+
+   PPFrame.setVisible(true);
+}
+private void openCODWindow() {
+    JFrame CODFrame = new JFrame("COD Details");
+    CODFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    CODFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+   	CODFrame.setSize(400, 200);
+    CODFrame.setLayout(new GridLayout(3, 2));
+
+    JLabel CODLabel = new JLabel("Amount of Cash:");
+    JTextField CODField = new JTextField(15);
+    
+    JButton confirmButton = new JButton("Confirm");
+
+    confirmButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == confirmButton) {
+                String COD = CODField.getText();
+                
+
+
+                JOptionPane.showMessageDialog(CODFrame, "Payment Successful!\nThank you!");
+
+                CODFrame.dispose(); // Close the COD details window
+            }
+        }
+    });
+
+   CODFrame.add(CODLabel);
+   CODFrame.add(CODField);
+   CODFrame.add(new JLabel());
+   CODFrame.add(confirmButton);
+
+   CODFrame.setVisible(true);
+}
 	
 
 
