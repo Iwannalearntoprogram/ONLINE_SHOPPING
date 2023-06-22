@@ -33,6 +33,7 @@ public class CustomTextField extends JTextField  {
     private boolean mouseFocus = false;
     private String labelText = "";
     private Color lineColor = new Color(81, 92, 108);
+    public Dimension buttonSize;
 
     public CustomTextField() {
         setBorder(new EmptyBorder(20, 3, 10, 3));
