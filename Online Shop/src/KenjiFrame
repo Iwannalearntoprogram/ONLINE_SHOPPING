@@ -1,0 +1,674 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.SecureRandom;
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+public class MainFrame extends JFrame {
+    private JPanel productPanel;
+    protected CustomButton deliverButton;    
+    protected CustomButton toReceiveButton;
+    protected CustomButton historyButton;
+    private CustomButton searchButton;
+    protected CustomButton cartButton;
+    private JLabel breadLabel;
+    private CustomButton breadMinusButton;
+    private CustomButton breadPlusButton;
+    private JLabel chocolateLabel;
+    private CustomButton chocolateMinusButton;
+    private CustomButton chocolatePlusButton;
+    private JLabel ramenLabel;
+    private CustomButton ramenMinusButton;
+    private CustomButton ramenPlusButton;
+    private JLabel cartSizeLabel;
+    private ArrayList<String> shoppingCart;
+    private Map<String, ImageIcon> productImages;
+    private String logged;
+    
+    
+
+    // MainFrame
+    public MainFrame(String logged) {
+        this.logged = logged;
+
+        setTitle("NAOIMISE");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(1100, 943);
+		setLocationRelativeTo(null);
+        setResizable(false);
+        setLayout(null);
+
+        // Create a background label with the specified image
+        ImageIcon backgroundImage = new ImageIcon("Background.png");
+        JLabel backgroundLabel = new JLabel(backgroundImage);
+        backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
+        add(backgroundLabel);
+
+        // Create and customize the title label
+        JLabel titleLabel = new JLabel("NAOIMISE");
+        titleLabel.setBounds(0, 20, getWidth(), 50);
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        titleLabel.setFont(new Font("joystix monospace", Font.BOLD, 50));
+        backgroundLabel.add(titleLabel);
+
+        // Create the product panel and set its properties
+        productPanel = new JPanel();
+        productPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Set FlowLayout for horizontal and centered
+                                                                           // positioning
+        productPanel.setOpaque(false);
+        productPanel.setBounds(100, 200, getWidth() - 200, getHeight() - 300);
+        backgroundLabel.add(productPanel);
+
+        // Create and customize the buttons
+        deliverButton = new CustomButton("Deliver");
+        deliverButton.setBounds(50, 100, 200, 50);
+        backgroundLabel.add(deliverButton);
+
+        
+        toReceiveButton = new CustomButton("To Receive");
+        toReceiveButton.setFont(new Font("joystix monospace", Font.PLAIN, 18));
+        toReceiveButton.setBounds(260, 100, 200, 50);
+        toReceiveButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent a) {
+                JFrame toRecFrame = new JFrame("Delivery to be Received");
+                toRecFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                toRecFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+                toRecFrame.setSize(1000, 500);
+                toRecFrame.setResizable(false);
+                toRecFrame.setLocationRelativeTo(null);
+                toRecFrame.setLayout(new BorderLayout());
+
+                JTable table = new JTable(new DefaultTableModel(new Object[]{"ID", "Fullname", "Address", "Items", "", ""}, 0)){
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                    
+                table.setBorder(new MatteBorder(1, 1, 0, 0, new Color(220,220,220)));
+                table.setGridColor(new Color(220,220,220));
+                
+                table.setCellSelectionEnabled(false);
+                DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+                
+
+                try{
+                    FileReader fr = new FileReader("delivery.txt");
+                    BufferedReader br = new BufferedReader(fr);
+                    String line;
+                    while((line=br.readLine())!=null){
+                        String[] lnSplitted = line.split(";");
+                        System.out.println(lnSplitted[5]);
+
+                        if (lnSplitted[1].equals(logged) && lnSplitted[6].equals("False") ){
+                            tableModel.addRow(new Object[]{lnSplitted[1], lnSplitted[2] + " " + lnSplitted[3], lnSplitted[4], lnSplitted[7], lnSplitted[0], lnSplitted[6]});
+                        }
+                    }
+                    fr.close();
+                }catch(Exception e){}
+
+                JScrollPane tableScr  = new JScrollPane(table);
+                tableScr.setBorder( BorderFactory.createLineBorder(new Color(170,170,170)));
+                tableScr.setBounds(10, 60, 960, 340);
+            
+                table.removeColumn(table.getColumnModel().getColumn(4));                   
+                table.removeColumn(table.getColumnModel().getColumn(4));   
+
+                // the back button
+                CustomButton orderReceivedBtn = new CustomButton("Order Received");
+                orderReceivedBtn.setFont(new Font("joystix monospace", Font.BOLD, 15));
+                orderReceivedBtn.setBounds(10, 410, 200, 45);
+                orderReceivedBtn.addActionListener(new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        if (!table.getSelectionModel().isSelectionEmpty() && JOptionPane.showConfirmDialog(
+                            MainFrame.this, 
+                            "Are you sure you received the item?", 
+                            "Delivery Reception",
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+
+                            try {
+                        
+                                List<String> fileContent = new ArrayList<>(Files.readAllLines(Paths.get("delivery.txt"), StandardCharsets.UTF_8));
+
+                                for (int i = 0; i < fileContent.size(); i++) {
+                                    String[] lnSplitted = fileContent.get(i).split(";");
+
+                                    int column = 4;
+                                    int row = table.getSelectedRow();
+                                    String value = table.getModel().getValueAt(row, column).toString();
+
+                                    System.out.println(value);
+
+                                    if (lnSplitted[0].equals(value)) {
+                                        fileContent.set(
+                                            i, 
+                                            String.format(
+                                                "%s;%s;%s;%s;%s;%s;%s;%s",
+                                                lnSplitted[0],
+                                                logged,
+                                                lnSplitted[2],
+                                                lnSplitted[3],
+                                                lnSplitted[4],
+                                                lnSplitted[5],
+                                                "True",
+                                                lnSplitted[7])
+                                            );
+                                        break;
+                                    }
+                                }
+
+                                Files.write(Paths.get("delivery.txt"), fileContent, StandardCharsets.UTF_8);
+
+                                tableModel.setRowCount(0);
+
+                                FileReader fr = new FileReader("delivery.txt");
+                                BufferedReader br = new BufferedReader(fr);
+                                String line;
+                                while((line=br.readLine())!=null){
+                                    String[] lnSplitted = line.split(";");
+                                    System.out.println(lnSplitted[5]);
+
+                                    if (lnSplitted[1].equals(logged) && lnSplitted[6].equals("False") ){
+                                        tableModel.addRow(new Object[]{lnSplitted[1], lnSplitted[2] + " " + lnSplitted[3], lnSplitted[4], lnSplitted[7], lnSplitted[0], lnSplitted[6]});
+                                    }
+                                }
+                                fr.close();
+                                
+                            } catch (Exception eo) {
+                                eo.printStackTrace();
+
+                            }
+                        }
+                    }
+       
+                });
+                
+                JLabel titleLabel = new JLabel("DELIVERY TO BE RECEIVED");
+                titleLabel.setBounds(0, 5, getWidth(), 50);
+                titleLabel.setHorizontalAlignment(JLabel.CENTER);
+                titleLabel.setFont(new Font("joystix monospace", Font.BOLD, 30));
+                
+                toRecFrame.add(titleLabel);  
+                toRecFrame.add(orderReceivedBtn);
+                toRecFrame.add(tableScr);                         
+                toRecFrame.add(new JPanel());                
+       
+                toRecFrame.setVisible(true);
+                
+            }
+        });
+        backgroundLabel.add(toReceiveButton);
+        
+        historyButton = new CustomButton("History");
+        historyButton.setBounds(470, 100, 200, 50);
+        historyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent a) {
+                JFrame toRecFrame = new JFrame("History");
+                toRecFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                toRecFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+                toRecFrame.setSize(1000, 500);
+                toRecFrame.setResizable(false);
+                toRecFrame.setLocationRelativeTo(null);
+                toRecFrame.setLayout(new BorderLayout());
+
+                JTable table = new JTable(new DefaultTableModel(new Object[]{"ID", "Fullname", "Address", "Items", "", ""}, 0)){
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                    
+                table.setBorder(new MatteBorder(1, 1, 0, 0, new Color(220,220,220)));
+                table.setGridColor(new Color(220,220,220));
+                
+                table.setCellSelectionEnabled(false);
+                DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+                
+                try{
+                    FileReader fr = new FileReader("delivery.txt");
+                    BufferedReader br = new BufferedReader(fr);
+                    String line;
+                    while((line=br.readLine())!=null){
+                        String[] lnSplitted = line.split(";");
+                        System.out.println(lnSplitted[5]);
+
+                        if (lnSplitted[1].equals(logged) && lnSplitted[6].equals("True") ){
+                            tableModel.addRow(new Object[]{lnSplitted[1], lnSplitted[2] + " " + lnSplitted[3], lnSplitted[4], lnSplitted[7], lnSplitted[0], lnSplitted[6]});
+                        }
+                    }
+                    fr.close();
+                }catch(Exception e){}
+
+                JScrollPane tableScr  = new JScrollPane(table);
+                tableScr.setBorder( BorderFactory.createLineBorder(new Color(170,170,170)));
+                tableScr.setBounds(10, 60, 960, 390);
+            
+                table.removeColumn(table.getColumnModel().getColumn(4));                   
+                table.removeColumn(table.getColumnModel().getColumn(4));   
+
+                JLabel titleLabel = new JLabel("DELIVERY HISTORY");
+                titleLabel.setBounds(0, 5, getWidth(), 50);
+                titleLabel.setHorizontalAlignment(JLabel.CENTER);
+                titleLabel.setFont(new Font("joystix monospace", Font.BOLD, 30));
+                
+                toRecFrame.add(titleLabel);    
+                toRecFrame.add(tableScr);                 
+                toRecFrame.add(new JPanel());                     
+                toRecFrame.setVisible(true);
+                
+            }
+        });
+
+        backgroundLabel.add(historyButton);
+
+        searchButton = new CustomButton("SEARCH");
+        searchButton.setBounds(getWidth() - 265, 100, 200, 50);
+        backgroundLabel.add(searchButton);
+
+        cartButton = new CustomButton("Cart");
+        cartButton.setBounds(getWidth() - 265, 160, 200, 50);
+        backgroundLabel.add(cartButton);
+
+        breadLabel = new JLabel("Bread");
+        ImageIcon bread = new ImageIcon("src/Bread.png");
+        breadLabel.setIcon(bread);
+
+        // breadLabel = new JLabel(new ImageIcon("src/Bread.png"));
+
+        breadMinusButton = new CustomButton("-");
+        breadPlusButton = new CustomButton("+");
+        customizeProductButton(breadLabel, breadMinusButton, breadPlusButton);
+
+        chocolateLabel = new JLabel("Chocolate");
+        ImageIcon chocolate = new ImageIcon("src/Chocolate.png");
+        chocolateLabel.setIcon(chocolate);
+
+        // chocolateLabel = new JLabel(new ImageIcon("src/Bread.png"));
+
+        // Adjust dimensions and positions for the product elements
+        int labelWidth = 475;
+        int labelHeight = 200;
+        int buttonWidth = 60;
+        int buttonHeight = 50;
+        
+        chocolateMinusButton = new CustomButton("-");
+        chocolatePlusButton = new CustomButton("+");
+        customizeProductButton(chocolateLabel, chocolateMinusButton, chocolatePlusButton);
+
+        ramenLabel = new JLabel("Ramen");
+        ImageIcon ramen = new ImageIcon("src/Ramen.png");
+        ramenLabel.setIcon(ramen);
+
+        ramenMinusButton = new CustomButton("-");
+        ramenPlusButton = new CustomButton("+");
+        ramenLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
+
+        customizeProductButton(ramenLabel, ramenMinusButton, ramenPlusButton);
+
+        breadLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
+        breadMinusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        breadPlusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+
+        chocolateLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
+        chocolateMinusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        chocolatePlusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+
+        // Create separate panels for bread and chocolate labels along with their
+        // buttons
+        JPanel breadPanel = new JPanel();
+        breadPanel.setOpaque(false);
+        breadPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        breadPanel.add(breadLabel);
+        breadPanel.add(breadMinusButton);
+        breadPanel.add(breadPlusButton);
+
+        JPanel chocolatePanel = new JPanel();
+        chocolatePanel.setOpaque(false);
+        chocolatePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        chocolatePanel.add(chocolateLabel);
+        chocolatePanel.add(chocolateMinusButton);
+        chocolatePanel.add(chocolatePlusButton);
+
+        // Create a separate panel for the ramen label and its buttons
+        JPanel ramenPanel = new JPanel();
+        ramenPanel.setOpaque(false);
+        ramenPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        ramenPanel.add(ramenLabel);
+        ramenPanel.add(ramenMinusButton);
+        ramenPanel.add(ramenPlusButton);
+
+        // Add the product elements to the product panel
+        productPanel.add(breadPanel);
+        productPanel.add(chocolatePanel);
+        productPanel.add(ramenPanel);
+
+        // Initialize product images
+        productImages = new HashMap<>();
+        productImages.put("Bread", new ImageIcon("src/Bread.png"));
+        productImages.put("Chocolate", new ImageIcon("src/Chocolate.png"));
+        productImages.put("Ramen", new ImageIcon("src/Ramen.png"));
+
+        // Cart frame
+        cartSizeLabel = new JLabel("Cart Size: 0");
+        cartSizeLabel.setBounds(50, 160, 500, 50);
+        cartSizeLabel.setFont(new Font("joystix monospace", Font.BOLD, 20));
+        backgroundLabel.add(cartSizeLabel);
+
+        // Initialize Shopping cart
+
+        shoppingCart = new ArrayList<>();
+
+        // Add Action Listener to Cart Button
+        cartButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent a) {
+                showCartDialog();
+            }
+        });
+
+        // Add action listener to deliver Button
+        deliverButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                DeliverWindow();
+            }
+        });
+
+        // Add action listener to the search button
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showSearchWindow();
+            }
+        });
+
+        setVisible(true);
+
+        // method to add to cart
+    }
+
+    private void addToCart(String product) {
+        shoppingCart.add(product.split(" - ")[0]);
+        updateCartSizeLabel();
+
+        // updates the cart
+    }
+
+    private void updateCartSizeLabel() {
+        cartSizeLabel.setText("Cart Size: " + shoppingCart.size());
+
+        int bread = 0, chocolate = 0, ramen = 0;
+        for (String string : shoppingCart) {
+            if (string.equals("Bread"))
+                bread += 1;
+            else if (string.equals("Chocolate"))
+                chocolate += 1;
+            else if (string.equals("Ramen"))
+                ramen += 1;
+        } 
+
+        if (bread != 0)
+            breadLabel.setText("Bread - " + bread);
+        else
+            breadLabel.setText("Bread");
+
+        if (chocolate != 0)
+            chocolateLabel.setText("Chocolate - " + chocolate);
+        else
+            chocolateLabel.setText("Chocolate");
+
+        if (ramen != 0)
+            ramenLabel.setText("Ramen - " + ramen);
+        else
+            ramenLabel.setText("Ramen");
+
+        // shows Item and displays the updated Cart
+    }
+
+    private void showCartDialog() {
+        StringBuilder cartContent = new StringBuilder();
+        
+        int bread = 0, chocolate = 0, ramen = 0;
+        for (String string : shoppingCart) {
+            if (string.equals("Bread"))
+                bread += 1;
+            else if (string.equals("Chocolate"))
+                chocolate += 1;
+            else if (string.equals("Ramen"))
+                ramen += 1;
+        } 
+
+        if (bread != 0)
+            cartContent.append("Bread - " + bread).append("\n");
+        if (chocolate != 0)
+            cartContent.append("Chocolate - " + chocolate).append("\n");
+        if (ramen != 0)
+            cartContent.append("Ramen - " + ramen).append("\n");
+
+        JOptionPane.showMessageDialog(
+            MainFrame.this, 
+            cartContent.toString(), 
+            "Shopping Cart",
+            JOptionPane.INFORMATION_MESSAGE);
+
+        // remove from cart
+    }
+
+    private void removeFromCart(String product) {     
+        shoppingCart.remove(product.split(" - ")[0]);
+        updateCartSizeLabel();
+    }
+
+    // Custom Buttons
+    private void customizeProductButton(JLabel productLabel, CustomButton minusButton, CustomButton plusButton) {
+        productLabel.setFont(new Font("joystix monospace", Font.BOLD, 20));
+        productLabel.setForeground(Color.WHITE); // Set label text color
+        Color buttonColor = new Color(255, 255, 255);
+        minusButton.setBackground(buttonColor);
+        plusButton.setBackground(buttonColor);
+
+        plusButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addToCart(productLabel.getText());
+            }
+        });
+
+        minusButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeFromCart(productLabel.getText());
+            }
+        });
+
+        minusButton.setPreferredSize(new Dimension(60, 50));
+        plusButton.setPreferredSize(new Dimension(60, 50));
+    }
+
+    // Delivery Frame
+    private void DeliverWindow() {
+        JFrame deliverFrame = new JFrame("Delivery Details");
+        deliverFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        deliverFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+        deliverFrame.setSize(500, 500);
+        deliverFrame.setLocationRelativeTo(this);
+
+        deliverFrame.setLayout(new BorderLayout());
+
+        // Create a JTextArea to display the cart content
+        JTextArea cartTextArea = new JTextArea(10, 20);
+        cartTextArea.setEditable(false);
+        JScrollPane cartScrollPane = new JScrollPane(cartTextArea);
+
+        // Create other components for delivery details
+        JLabel firstNameLabel = new JLabel("First Name:");
+        JTextField firstNameField = new JTextField(15);
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        JTextField lastNameField = new JTextField(15);
+        JLabel addressLabel = new JLabel("Address:");
+        JTextField addressField = new JTextField(15);
+        JLabel cardNumberLabel = new JLabel("Card Number:");
+        JTextField cardNumberField = new JTextField(15);
+        CustomButton payButton = new CustomButton("Pay");
+
+        // Add components to the deliverFrame
+        JPanel deliveryPanel = new JPanel();
+        deliveryPanel.setLayout(new GridLayout(6, 2));
+        deliveryPanel.add(firstNameLabel);
+        deliveryPanel.add(firstNameField);
+        deliveryPanel.add(lastNameLabel);
+        deliveryPanel.add(lastNameField);
+        deliveryPanel.add(addressLabel);
+        deliveryPanel.add(addressField);
+        deliveryPanel.add(cardNumberLabel);
+        deliveryPanel.add(cardNumberField);
+        deliveryPanel.add(new JLabel()); // empty label for spacing
+        deliveryPanel.add(payButton);
+
+        deliverFrame.add(cartScrollPane, BorderLayout.NORTH);
+        deliverFrame.add(deliveryPanel, BorderLayout.CENTER);
+
+        // Display the cart content in the JTextArea
+        StringBuilder cartContent = new StringBuilder();
+        
+        
+        int bread = 0, chocolate = 0, ramen = 0;
+        for (String string : shoppingCart) {
+            if (string.equals("Bread"))
+                bread += 1;
+            else if (string.equals("Chocolate"))
+                chocolate += 1;
+            else if (string.equals("Ramen"))
+                ramen += 1;
+        } 
+
+        if (bread != 0)
+            cartContent.append("Bread - " + bread).append("\n");
+        if (chocolate != 0)
+            cartContent.append("Chocolate - " + chocolate).append("\n");
+        if (ramen != 0)
+            cartContent.append("Ramen - " + ramen).append("\n");
+
+        cartTextArea.setText(cartContent.toString());
+        
+        deliverFrame.setVisible(true);
+
+        payButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                if (ae.getSource() == payButton) {
+                    String firstName = firstNameField.getText();
+                    String lastName = lastNameField.getText();
+                    String address = addressField.getText();                    
+                    String cardNumber = cardNumberField.getText();
+
+
+                    // Perform payment processing or save user information
+                    // You can add your payment logic or database storage code here
+
+                    try {
+                        FileWriter fw = new FileWriter("delivery.txt", true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+
+                        bw.write(String.format(
+                            "%s;%s;%s;%s;%s;%s;%s;%s",
+                            UUID.randomUUID().toString(),
+                            logged,
+                            firstName,
+                            lastName,                            
+                            address,
+                            cardNumber,
+                            "False",
+                            cartContent.toString().replace('\n', ',')));
+
+                        bw.newLine();
+                        bw.close();
+                        fw.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    JOptionPane.showMessageDialog(deliverFrame, "Payment Successful!\nThank you, " + firstName + " " + lastName + "!");
+                }
+            }
+        });
+    }
+
+    private void showSearchWindow() {
+    JFrame searchFrame = new JFrame("Search Products");
+    searchFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    searchFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+    searchFrame.setSize(400, 300);
+    searchFrame.setLayout(new FlowLayout());
+
+    // Create search label and text field
+    JLabel searchLabel = new JLabel("Search: ");
+    JTextField searchField = new JTextField(20);
+    searchLabel.setFont(new Font("joystix monospace", Font.BOLD, 10));
+
+    // Create search button
+    JButton searchButton = new JButton("Search");
+    searchButton.setFont(new Font("joystix monospace", Font.BOLD, 10));
+
+    // Add action listener to the search button
+    searchButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String searchText = searchField.getText();
+            if (productImages.containsKey(searchText)) {
+                // If the searched product exists, create and show a new window with the product image and details
+                JFrame resultFrame = new JFrame("Search Result");
+                resultFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                resultFrame.setLayout(new BorderLayout());
+
+                // Create and add the product image label at the top center
+                JLabel imageLabel = new JLabel(productImages.get(searchText));
+                resultFrame.add(imageLabel, BorderLayout.NORTH);
+
+                // Create and add the product details text area dynamically aligned in the center
+                String details;
+                if (searchText.equalsIgnoreCase("bread")) {
+                    details = "Details:\nFreshly baked naoimise bread made with love. Delight your taste buds with our perfectly golden crust, giving way to a soft and airy interior that's simply irresistible. \nMade with premium, carefully selected ingredients. From classic favorites like sourdough and whole wheat to unique creations like sun-dried tomato and olive, \nour diverse range caters to all preferences.";
+                } else if (searchText.equalsIgnoreCase("chocolate")) {
+                    details = "Details:\nIndulge in the divine temptation of our exquisite chocolate creations. Made with the finest, rich cocoa and crafted with utmost precision, our chocolates are a pure delight for chocolate enthusiasts. \nEach piece is carefully handcrafted, ensuring an unparalleled sensory experience. \nElevate your moments and savor the extraordinary taste of our naoimise chocolate creations.";
+                } else if (searchText.equalsIgnoreCase("ramen")) {
+                    details = "Details:\nExperience the authentic taste of Japan with our mouthwatering ramen bowls. Crafted with precision and passion, our ramen is a celebration of flavors and textures. \nImmerse yourself in the rich and savory broth, simmered to perfection with a blend of aromatic spices and carefully selected ingredients. \nSlurp on the firm and springy noodles, expertly cooked to deliver the perfect bite. Elevate your dining experience and awaken your taste buds with every spoonful.";
+                } else {
+                    details = "No details found for your search query: " + searchText;
+                }
+                JTextArea detailsArea = new JTextArea(details);
+                detailsArea.setEditable(false);
+                JScrollPane scrollPane = new JScrollPane(detailsArea);
+                resultFrame.add(scrollPane, BorderLayout.CENTER);
+
+                // Resize the window to fit the details
+                resultFrame.pack();
+
+                resultFrame.setVisible(true);
+            }
+        }
+    });
+
+    // Add components to the search frame
+    searchFrame.add(searchLabel);
+    searchFrame.add(searchField);
+    searchFrame.add(searchButton);
+
+    searchFrame.setVisible(true);
+  }
+}
+
