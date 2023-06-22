@@ -8,6 +8,8 @@ import javax.swing.border.*;
  
 
 public class CustomButton extends JButton {
+    private int fontSize = 25;
+    
 	public CustomButtonStyle getStyle() {
         return style;
     }
@@ -23,15 +25,31 @@ public class CustomButton extends JButton {
     private CustomButtonStyle style = CustomButtonStyle.PRIMARY;
     private ButtonColor currentStyle = new ButtonColor(CustomButtonStyle.PRIMARY);
 
+    
+    public CustomButton(String text){
+        setText(text);
+        load();
+    }
+
     public CustomButton() {
+        load();
+    }
+
+    @Override
+    public void setFont(Font font){
+        super.setFont(font);
+        fontSize = font.getSize();
+    }
+
+    private void load(){
     	try {
     	     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    	     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./src/joystix monospace.otf")));
+    	     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, getClass().getResource("joystix monospace.otf").openStream()));
     	} catch (IOException|FontFormatException e) {
-
+            System.out.println("eeffe");
     	}
     	
-    	setFont(new Font("joystix monospace", Font.PLAIN, 25));
+    	setFont(new Font("joystix monospace", Font.PLAIN, fontSize));
     	setFocusPainted(false);
         setContentAreaFilled(false);
         setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -39,29 +57,30 @@ public class CustomButton extends JButton {
             @Override
             public void mouseEntered(MouseEvent me) {
             	currentStyle.backgroundHover = getStyle().backgroundHover;
-            	setFont(new Font("joystix monospace", Font.BOLD, 25));
+
+            	setFont(new Font("joystix monospace", Font.BOLD, fontSize));
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
             	currentStyle.backgroundHover = getStyle().background;
-            	setFont(new Font("joystix monospace", Font.PLAIN, 25));
+            	setFont(new Font("joystix monospace", Font.PLAIN, fontSize));
             }
 
             @Override
             public void mousePressed(MouseEvent me) {
             	currentStyle.background = getStyle().backgroundPress;
-            	setFont(new Font("joystix monospace", Font.BOLD, 24));
+            	setFont(new Font("joystix monospace", Font.BOLD, fontSize - 1));
+                fontSize++;
             }
 
             @Override 
             public void mouseReleased(MouseEvent me) {
             	currentStyle.background = getStyle().background;
-            	setFont(new Font("joystix monospace", Font.BOLD, 25));
+            	setFont(new Font("joystix monospace", Font.BOLD, fontSize));
             }
         });
     }
-
 
     @Override
     protected void paintComponent(Graphics grphcs) {
