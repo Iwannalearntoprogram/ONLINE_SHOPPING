@@ -1,81 +1,167 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+package src;
 
-public class AdminFrame extends MainFrame{
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public class AdminFrame extends JFrame {
+    private JButton addProductButton;
+    private JButton addDetailsButton;
+    private JButton addPricesButton;
+    private int imageCount = 0;
+
+    private List<String> products;
+    private List<String> details;
+    private List<String> prices;
+
+    private java.net.URL back;
+
     public AdminFrame() {
-        super("Admin Frame");
-        setTitle("Admin Frame");
+        back = getClass().getResource("resources/Background.png");
+
+        // Create the add product button
+        addProductButton = new JButton("Add Product");
+        addProductButton.setFont(new Font("joystix manospace", Font.PLAIN, 25));
+        addProductButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Perform add product functionality
+                if (imageCount >= 4) {
+                    JOptionPane.showMessageDialog(AdminFrame.this,
+                            "Maximum limit of 4 PNG pictures reached.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Select PNG Picture");
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("PNG Images", "png"));
+
+                    int result = fileChooser.showOpenDialog(AdminFrame.this);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        // Logic to handle the selected PNG picture
+                        // Here you can implement the code to process the image file
+                        // and perform any necessary actions (e.g., saving, displaying, etc.)
+                        imageCount++;
+                    }
+                }
+            }
+        });
+
+        // Create the add details button
+        addDetailsButton = new JButton("Add Details");
+        addDetailsButton.setFont(new Font("joystix manospace", Font.PLAIN, 25));
+        addDetailsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Perform add details functionality
+                if (products.size() >= 4) {
+                    JOptionPane.showMessageDialog(AdminFrame.this,
+                            "Maximum limit of 4 products reached.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    String product = JOptionPane.showInputDialog(AdminFrame.this, "Enter product name:");
+                    if (product != null && !product.trim().isEmpty()) {
+                        if (products.contains(product)) {
+                            JOptionPane.showMessageDialog(AdminFrame.this,
+                                    "Product already exists.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            products.add(product);
+                            String detailsInput = JOptionPane.showInputDialog(AdminFrame.this, "Enter details for " + product + ":");
+                            if (detailsInput != null && !detailsInput.trim().isEmpty()) {
+                                details.add(detailsInput);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Create the add prices button
+        addPricesButton = new JButton("Add Prices");
+        addPricesButton.setFont(new Font("joystix manospace", Font.PLAIN, 25));
+        addPricesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Perform add prices functionality
+                if (products.size() >= 4) {
+                    JOptionPane.showMessageDialog(AdminFrame.this,
+                            "Maximum limit of 4 products reached.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    String product = JOptionPane.showInputDialog(AdminFrame.this, "Enter product name:");
+                    if (product != null && !product.trim().isEmpty()) {
+                        if (products.contains(product)) {
+                            JOptionPane.showMessageDialog(AdminFrame.this,
+                                    "Product already exists.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            products.add(product);
+                            String pricesInput = JOptionPane.showInputDialog(AdminFrame.this, "Enter prices for " + product + ":");
+                            if (pricesInput != null && !pricesInput.trim().isEmpty()) {
+                                prices.add(pricesInput);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initialize lists to store products, details, and prices
+        products = new ArrayList<>();
+        details = new ArrayList<>();
+        prices = new ArrayList<>();
+
+        // Set the properties for the frame
+        setTitle("Admin Panel");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1100, 943);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         setResizable(false);
 
-        // Set the background image
-        try {
-            String imagePath = "Background.png"; // Replace with the actual path to your background image
-            Image backgroundImage = ImageIO.read(new File(imagePath));
-            BackgroundPanel backgroundPanel = new BackgroundPanel(backgroundImage);
-            setContentPane(backgroundPanel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Create a panel to hold the buttons with GridBagLayout
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        // Create a label for the title
-        JLabel titleLabel = new JLabel("Welcome Master");
-        titleLabel.setBounds(0, 20, getWidth(), 50);
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        titleLabel.setFont(new Font("joystix monospace", Font.BOLD, 50));
-        add(titleLabel);
+        // Add the buttons to the panel with GridBagConstraints
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        buttonPanel.add(addProductButton, gbc);
 
-        // Create three buttons with custom font and shape
-        int buttonWidth = 250;
-        int buttonHeight = 50;
-        int spacing = 20;
-        int totalHeight = (buttonHeight + spacing) * 3;
+        gbc.gridy = 1;
+        buttonPanel.add(addDetailsButton, gbc);
 
-        // Calculate the center position for the buttons
-        int centerX = (getWidth() - buttonWidth) / 2;
-        int centerY = (getHeight() - totalHeight) / 2;
+        gbc.gridy = 2;
+        buttonPanel.add(addPricesButton, gbc);
 
-        JButton button1 = new JButton("EDIT DETAILS");
-        button1.setFont(new Font("joystix monospace", Font.PLAIN, 18));
-        button1.setBounds(centerX, centerY, buttonWidth, buttonHeight);
-        add(button1);
+        // Create a panel to hold the welcome message
+        JPanel welcomePanel = new JPanel();
+        welcomePanel.setOpaque(false);
+        JLabel welcomeLabel = new JLabel("Welcome Master");
+        welcomeLabel.setFont(new Font("joystix manospace", Font.BOLD, 40));
+        welcomePanel.add(welcomeLabel);
 
-        JButton button2 = new JButton("EDIT PRICE");
-        button2.setFont(new Font("joystix monospace", Font.PLAIN, 18));
-        button2.setBounds(centerX, centerY + buttonHeight + spacing, buttonWidth, buttonHeight);
-        add(button2);
+        // Create a panel to hold both the buttons and welcome message panels
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setOpaque(false);
+        mainPanel.add(welcomePanel, BorderLayout.NORTH);
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        JButton button3 = new JButton("ADD PRODUCTS");
-        button3.setFont(new Font("joystix monospace", Font.PLAIN, 18));
-        button3.setBounds(centerX, centerY + 2 * (buttonHeight + spacing), buttonWidth, buttonHeight);
-        add(button3);
+        // Set the content pane and set the background image
+        setContentPane(new JLabel(new ImageIcon(back)));
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-
-        JButton button4 = new JButton("ORDERS");
-        button1.setFont(new Font("joystix monospace", Font.PLAIN, 18));
-        button1.setBounds(centerX, centerY, buttonWidth, buttonHeight);
-        add(button4);
-
-        // Set the layout manager for the window
-        setLayout(null);
+        setVisible(true);
     }
 
-    // Custom JPanel to set the background image
-    static class BackgroundPanel extends JPanel {
-        private Image backgroundImage;
-
-        public BackgroundPanel(Image backgroundImage) {
-            this.backgroundImage = backgroundImage;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
+    public static void main(String[] args) {
+        new AdminFrame();
     }
 }
+
