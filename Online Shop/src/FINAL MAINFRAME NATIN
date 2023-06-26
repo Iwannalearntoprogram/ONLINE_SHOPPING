@@ -40,6 +40,10 @@ public class MainFrame extends JFrame {
     private JLabel samsungPrice;
     private CustomButton samsungMinusButton;
     private CustomButton samsungPlusButton;
+    private JLabel nikeLabel;
+    private JLabel nikePrice;
+    private CustomButton nikeMinusButton;
+    private CustomButton nikePlusButton;
     private JLabel cartSizeLabel;
     private ArrayList<String> shoppingCart;
     private Map<String, ImageIcon> productImages;
@@ -51,6 +55,7 @@ public class MainFrame extends JFrame {
     private java.net.URL iphonePath;
     private java.net.URL macbookPath;
     private java.net.URL samsungPath;
+    private java.net.URL nikePath;
     private java.net.URL dataDel;
 
     // MainFrame
@@ -61,6 +66,7 @@ public class MainFrame extends JFrame {
         iphonePath = getClass().getResource("resources/Iphone12.png");
         macbookPath = getClass().getResource("resources/Macbook.png");
         samsungPath = getClass().getResource("resources/Samsung.png");
+        nikePath = getClass().getResource("resources/Nike.png");
         dataDel = getClass().getResource("data/delivery.txt");
         
 
@@ -85,17 +91,16 @@ public class MainFrame extends JFrame {
         backgroundLabel.add(titleLabel);
 
         // Create the product panel and set its properties
-        productPanel = new JPanel();
-        productPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Set FlowLayout for horizontal and centered
-                                                                           // positioning
-        productPanel.setOpaque(false);
-        productPanel.setBounds(100, 200, getWidth() - 200, getHeight() - 300);
-        backgroundLabel.add(productPanel);
-
-        // Create and customize the buttons
-        deliverButton = new CustomButton("Deliver");
-        deliverButton.setBounds(50, 100, 200, 50);
-        backgroundLabel.add(deliverButton);
+       productPanel = new JPanel();
+       productPanel.setLayout(new GridLayout(0, 2, 10, 10)); // Set GridLayout with 2 columns and variable rows
+       productPanel.setOpaque(false);
+       productPanel.setBounds(100, 200, getWidth() - 200, getHeight() - 300);
+       backgroundLabel.add(productPanel);
+       
+       // Create and customize the buttons
+       deliverButton = new CustomButton("Deliver");
+       deliverButton.setBounds(50, 100, 200, 50);
+       backgroundLabel.add(deliverButton);
 
         
         toReceiveButton = new CustomButton("To Receive");
@@ -244,6 +249,7 @@ public class MainFrame extends JFrame {
         historyButton = new CustomButton("History");
         historyButton.setBounds(470, 100, 200, 50);
         historyButton.addActionListener(new ActionListener() {
+            
             public void actionPerformed(ActionEvent a) {
                 JFrame toRecFrame = new JFrame("History");
                 toRecFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -318,26 +324,22 @@ public class MainFrame extends JFrame {
             iphoneLabel = new JLabel("Iphone");
             ImageIcon iphone = new ImageIcon(iphonePath);
             iphoneLabel.setIcon(iphone);
-            
             iphonePrice = new JLabel("$999.99");
             iphonePrice.setFont(new Font("joystix monospace", Font.BOLD, 20));
             iphonePrice.setForeground(Color.BLACK);
-            iphonePrice.setPreferredSize(new Dimension(85, 50));
-            // breadLabel = new JLabel(new ImageIcon(breadPath));
-
+            iphonePrice.setPreferredSize(new Dimension(120, 50));
             iphoneMinusButton = new CustomButton("-");
             iphonePlusButton = new CustomButton("+");
             customizeProductButton(iphoneLabel, iphoneMinusButton, iphonePlusButton);
 
+
             macbookLabel = new JLabel("Macbook");
             ImageIcon macbook = new ImageIcon(macbookPath);
             macbookLabel.setIcon(macbook);
-
             macbookPrice = new JLabel("$1999.99");
             macbookPrice.setFont(new Font("joystix monospace", Font.BOLD, 20));
             macbookPrice.setForeground(Color.BLACK);
-            macbookPrice.setPreferredSize(new Dimension(85, 50));
-            // chocolateLabel = new JLabel(new ImageIcon(breadPath));
+            macbookPrice.setPreferredSize(new Dimension(150, 50));
 
             // Adjust dimensions and positions for the product elements
             int labelWidth = 475;
@@ -352,18 +354,26 @@ public class MainFrame extends JFrame {
             samsungLabel = new JLabel("Samsung");
             ImageIcon samsung = new ImageIcon(samsungPath);
             samsungLabel.setIcon(samsung);
-
             samsungPrice = new JLabel("$729.99");
             samsungPrice.setFont(new Font("joystix monospace", Font.BOLD, 20));
             samsungPrice.setForeground(Color.BLACK);
-            samsungPrice.setPreferredSize(new Dimension(85, 50));
-
+            samsungPrice.setPreferredSize(new Dimension(120, 50));
             samsungMinusButton = new CustomButton("-");
             samsungPlusButton = new CustomButton("+");
             samsungLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
 
             customizeProductButton(samsungLabel, samsungMinusButton, samsungPlusButton);
 
+            nikeLabel = new JLabel("Nike");
+            ImageIcon nike = new ImageIcon(nikePath);
+            nikeLabel.setIcon(nike);
+            nikePrice = new JLabel("$129.99");
+            nikePrice.setFont(new Font("joystix monospace", Font.BOLD, 20));
+            nikePrice.setForeground(Color.BLACK);
+            nikePrice.setPreferredSize(new Dimension(120, 50));
+            nikeMinusButton = new CustomButton("-");
+            nikePlusButton = new CustomButton("+");
+            customizeProductButton(nikeLabel, nikeMinusButton, nikePlusButton);
 
             iphoneLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
             iphoneMinusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
@@ -373,43 +383,56 @@ public class MainFrame extends JFrame {
             macbookMinusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
             macbookPlusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
 
+            nikeLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
+            nikeMinusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+            nikePlusButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+            
             // Create separate panels for bread and chocolate labels along with their
             // buttons
-            JPanel iphonePanel = new JPanel();
-            iphonePanel.setOpaque(false);
-            iphonePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
-            iphonePanel.add(iphoneLabel);
-            iphonePanel.add(iphonePrice);
-            iphonePanel.add(iphoneMinusButton);
-            iphonePanel.add(iphonePlusButton);
+           JPanel iphonePanel = new JPanel();
+           iphonePanel.setOpaque(false);
+           iphonePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+           iphonePanel.add(iphoneLabel);
+           iphonePanel.add(iphonePrice);
+           iphonePanel.add(iphoneMinusButton);
+           iphonePanel.add(iphonePlusButton);
 
-            JPanel macbookPanel = new JPanel();
-            macbookPanel.setOpaque(false);
-            macbookPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
-            macbookPanel.add(macbookLabel);
-            macbookPanel.add(macbookPrice);
-            macbookPanel.add(macbookMinusButton);
-            macbookPanel.add(macbookPlusButton);
+           JPanel macbookPanel = new JPanel();
+           macbookPanel.setOpaque(false);
+           macbookPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+           macbookPanel.add(macbookLabel);
+           macbookPanel.add(macbookPrice);
+           macbookPanel.add(macbookMinusButton);
+           macbookPanel.add(macbookPlusButton);
 
-            // Create a separate panel for the ramen label and its buttons
-            JPanel samsungPanel = new JPanel();
-            samsungPanel.setOpaque(false);
-            samsungPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-            samsungPanel.add(samsungLabel);
-            samsungPanel.add(samsungPrice);
-            samsungPanel.add(samsungMinusButton);
-            samsungPanel.add(samsungPlusButton);
+           JPanel samsungPanel = new JPanel();
+           samsungPanel.setOpaque(false);
+           samsungPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+           samsungPanel.add(samsungLabel);
+           samsungPanel.add(samsungPrice);
+           samsungPanel.add(samsungMinusButton);
+           samsungPanel.add(samsungPlusButton);
 
-            // Add the product elements to the product panel
-            productPanel.add(iphonePanel);
-            productPanel.add(macbookPanel);
-            productPanel.add(samsungPanel);
+           JPanel nikePanel = new JPanel();
+           nikePanel.setOpaque(false);
+           nikePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+           nikePanel.add(nikeLabel);
+           nikePanel.add(nikePrice);
+           nikePanel.add(nikeMinusButton);
+           nikePanel.add(nikePlusButton);
 
-            // Initialize product images
+        // Add the product panels to the product panel in the desired order
+           productPanel.add(iphonePanel);
+           productPanel.add(macbookPanel);
+           productPanel.add(samsungPanel);
+           productPanel.add(nikePanel);
+        
+           // Initialize product images
             productImages = new HashMap<>();
             productImages.put("Iphone", new ImageIcon(iphonePath));
             productImages.put("Macbook", new ImageIcon(macbookPath));
             productImages.put("Samsung", new ImageIcon(samsungPath));
+            productImages.put("Nike", new ImageIcon(nikePath));
 
             // Cart frame
             cartSizeLabel = new JLabel("<html>Cart Size: 0<br/>Total Price: P0<html/>");
@@ -456,245 +479,254 @@ public class MainFrame extends JFrame {
     }
 
     private void updateCartSizeLabel() {
-        int iphone = 0, macbook = 0, samsung = 0;
-        double totalIphone = 0, totalMacbook = 0, totalSamsung = 0;
+    int iphone = 0, macbook = 0, samsung = 0, nike = 0;
+    double totalIphone = 0, totalMacbook = 0, totalSamsung = 0, totalNike = 0;
 
-        for (String string : shoppingCart) {
-            if (string.equals("Iphone"))
-                iphone += 1;
-            else if (string.equals("Macbook"))
-                macbook += 1;
-            else if (string.equals("Samsung"))
-                samsung += 1;
-        }
-
-        if (iphone != 0) {
-            iphoneLabel.setText("Iphone - " + iphone);
-            totalIphone = 999.99 * iphone;  // Price for Iphone in USD
-        } else
-            iphoneLabel.setText("Iphone");
-
-        if (macbook != 0) {
-            macbookLabel.setText("Macbook - " + macbook);
-            totalMacbook = 1999.99 * macbook;  // Price for Macbook in USD
-        } else
-            macbookLabel.setText("Macbook");
-
-        if (samsung != 0) {
-            samsungLabel.setText("Samsung - " + samsung);
-            totalSamsung = 729.99 * samsung;  // Price for Samsung in USD
-        } else
-            samsungLabel.setText("Samsung");
-
-        double totalPrice = totalIphone + totalMacbook + totalSamsung;
-        cartSizeLabel.setText(String.format("<html>Cart Size: %d<br>Total Price: $%.2f<html/>", shoppingCart.size(), totalPrice));
-
-        // shows Item and displays the updated Cart
-    }
-
-    private void showCartDialog() {
-        StringBuilder cartContent = new StringBuilder();
-
-        int iphone = 0, macbook = 0, samsung = 0;
-        double totalIphone = 0, totalMacbook = 0, totalSamsung = 0;
-
-        for (String string : shoppingCart) {
-            if (string.equals("Iphone"))
-                iphone += 1;
-            else if (string.equals("Macbook"))
-                macbook += 1;
-            else if (string.equals("Samsung"))
-                samsung += 1;
-        }
-
-        if (iphone != 0)
-            cartContent.append(String.format("Iphone - %d pcs ($%.2f)", iphone, totalIphone = 999.99 * iphone)).append("\n");
-        if (macbook != 0)
-            cartContent.append(String.format("Macbook - %d pcs ($%.2f)", macbook, totalMacbook = 1999.99 * macbook)).append("\n");
-        if (samsung != 0)
-            cartContent.append(String.format("Samsung - %d pcs ($%.2f)", samsung, totalSamsung = 729.99 * samsung)).append("\n");
-
-        double totalPrice = totalIphone + totalMacbook + totalSamsung;
-        cartContent.append(String.format("Total Amount: $%.2f", totalPrice));
-
-        JOptionPane.showMessageDialog(
-            MainFrame.this,
-            cartContent.toString(),
-            "Shopping Cart",
-            JOptionPane.INFORMATION_MESSAGE);
-
-        // remove from cart
-    }
-
-    private void removeFromCart(String product) {
-        shoppingCart.remove(product.split(" - ")[0]);
-        updateCartSizeLabel();
-    }
-
-
-    // Custom Buttons
-    private void customizeProductButton(JLabel productLabel, CustomButton minusButton, CustomButton plusButton) {
-        productLabel.setFont(new Font("joystix monospace", Font.BOLD, 20));
-        productLabel.setForeground(Color.BLACK); // Set label text color
-        Color buttonColor = new Color(255, 255, 255);
-        minusButton.setBackground(buttonColor);
-        plusButton.setBackground(buttonColor);
-
-        plusButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addToCart(productLabel.getText());
-            }
-        });
-
-        minusButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                removeFromCart(productLabel.getText());
-            }
-        });
-
-        minusButton.setPreferredSize(new Dimension(60, 50));
-        plusButton.setPreferredSize(new Dimension(60, 50));
-    }
-
-    // Delivery Frame
-    private void DeliverWindow() {
-        JFrame deliverFrame = new JFrame("Delivery Details");
-        deliverFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        deliverFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
-        deliverFrame.setSize(500, 500);
-        deliverFrame.setLocationRelativeTo(this);
-        deliverFrame.setResizable(false);
-
-        deliverFrame.setLayout(new BorderLayout());
-
-
-        // Create a JTextArea to display the cart content
-        JTextArea cartTextArea = new JTextArea(10, 20);
-        cartTextArea.setEditable(false);
-        JScrollPane cartScrollPane = new JScrollPane(cartTextArea);
-
-
-        // Create other components for delivery details
-        JLabel firstNameLabel = new JLabel("First Name:");
-        JTextField firstNameField = new JTextField(15);
-        JLabel lastNameLabel = new JLabel("Last Name:");
-        JTextField lastNameField = new JTextField(15);
-        JLabel addressLabel = new JLabel("Address:");
-        JTextField addressField = new JTextField(15);
-        JLabel paymentMethodLabel = new JLabel("Payment Method:");
-        JComboBox<String> paymentMethodCombo = new JComboBox<>(new String[]{"Credit Card", "Cash on Delivery"});
-
-        // Display the cart content in the JTextArea
-        StringBuilder cartContent = new StringBuilder();
-
-        int iphone = 0, macbook = 0, samsung = 0,
-            totalIphone = 0, totalMacbook = 0, totalSamsung = 0;
-        for (String string : shoppingCart) {
-            if (string.equals("Iphone"))
-                iphone += 1;
-            else if (string.equals("Macbook"))
-                macbook += 1;
-            else if (string.equals("Samsung"))
+    for (String string : shoppingCart) {
+        if (string.equals("Iphone"))
+            iphone += 1;
+        else if (string.equals("Macbook"))
+            macbook += 1;
+        else if (string.equals("Samsung"))
             samsung += 1;
-        } 
+        else if (string.equals("Nike"))
+            nike += 1;
+    }
 
-        if (iphone != 0)
-            cartContent.append(String.format("Iphone - %d pcs ($%d)", iphone, totalIphone = (int) (999.99 * iphone))).append("\n");
-        if (macbook != 0)
-            cartContent.append(String.format("Macbook - %d pcs ($%d)", macbook, totalMacbook = (int) (1999.99 * macbook))).append("\n");
-        if (samsung != 0)
-            cartContent.append(String.format("Samsung - %d pcs ($%d)", samsung, totalSamsung = (int) (729.99 * samsung))).append("\n");
+    if (iphone != 0) {
+        iphoneLabel.setText("Iphone - " + iphone);
+        totalIphone = 999.99 * iphone;  // Price for Iphone in USD
+    } else
+        iphoneLabel.setText("Iphone");
 
-        cartContent.append(String.format("Total Amount: $%d", totalIphone + totalMacbook + totalSamsung));
+    if (macbook != 0) {
+        macbookLabel.setText("Macbook - " + macbook);
+        totalMacbook = 1999.99 * macbook;  // Price for Macbook in USD
+    } else
+        macbookLabel.setText("Macbook");
 
+    if (samsung != 0) {
+        samsungLabel.setText("Samsung - " + samsung);
+        totalSamsung = 729.99 * samsung;  // Price for Samsung in USD
+    } else
+        samsungLabel.setText("Samsung");
 
-        cartTextArea.setText(cartContent.toString());
+    if (nike != 0) {
+        nikeLabel.setText("Nike - " + nike);
+        totalNike = 129.99 * nike;  // Price for Nike in USD
+    } else
+        nikeLabel.setText("Nike");
 
+    double totalPrice = totalIphone + totalMacbook + totalSamsung + totalNike;
+    cartSizeLabel.setText(String.format("<html>Cart Size: %d<br>Total Price: $%.2f<html/>", shoppingCart.size(), totalPrice));
 
-            
-            CustomButton deliverButton = new CustomButton("Deliver");
-            deliverButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent ae) {
-                    if (ae.getSource() == deliverButton) {
-                        String firstName = firstNameField.getText();
-                        String lastName = lastNameField.getText();
-                        String address = addressField.getText();        
-                        String paymentMethod = (String) paymentMethodCombo.getSelectedItem();
+    // shows Item and displays the updated Cart
+}
 
-                        // Display the delivery details and cart content
-                        StringBuilder deliveryDetails = new StringBuilder();
-                        deliveryDetails.append("Delivery Details:\n\n");
-                        deliveryDetails.append("First Name: ").append(firstName).append("\n");
-                        deliveryDetails.append("Last Name: ").append(lastName).append("\n");
-                        deliveryDetails.append("Address: ").append(address).append("\n");
-                        deliveryDetails.append("Payment Method: ").append(paymentMethod).append("\n\n");
-                        deliveryDetails.append("Cart Content:\n").append(cartTextArea.getText());
+private void showCartDialog() {
+    StringBuilder cartContent = new StringBuilder();
 
-                        JOptionPane.showMessageDialog(deliverFrame, deliveryDetails.toString(), "Delivery Details", JOptionPane.INFORMATION_MESSAGE);
+    int iphone = 0, macbook = 0, samsung = 0, nike = 0;
+    double totalIphone = 0, totalMacbook = 0, totalSamsung = 0, totalNike = 0;
 
+    for (String string : shoppingCart) {
+        if (string.equals("Iphone"))
+            iphone += 1;
+        else if (string.equals("Macbook"))
+            macbook += 1;
+        else if (string.equals("Samsung"))
+            samsung += 1;
+        else if (string.equals("Nike"))
+            nike += 1;
+    }
 
-                        // Perform payment processing or save user information
-                        // You can add your payment logic or database storage code here
+    if (iphone != 0)
+        cartContent.append(String.format("Iphone - %d pcs ($%.2f)", iphone, totalIphone = 999.99 * iphone)).append("\n");
+    if (macbook != 0)
+        cartContent.append(String.format("Macbook - %d pcs ($%.2f)", macbook, totalMacbook = 1999.99 * macbook)).append("\n");
+    if (samsung != 0)
+        cartContent.append(String.format("Samsung - %d pcs ($%.2f)", samsung, totalSamsung = 729.99 * samsung)).append("\n");
+    if (nike != 0)
+        cartContent.append(String.format("Nike - %d pcs ($%.2f)", nike, totalNike = 129.99 * nike)).append("\n");
 
-                        try {
-                            FileWriter fw = new FileWriter(new File(dataDel.toURI()), true);
-                            BufferedWriter bw = new BufferedWriter(fw);
-                            
-                            List<String> splCart = new ArrayList<String>(Arrays.asList(cartContent.toString().split("\n")));
-                            splCart.remove(splCart.size()-1);
-                            
+    double totalPrice = totalIphone + totalMacbook + totalSamsung + totalNike;
+    cartContent.append(String.format("Total Amount: $%.2f", totalPrice));
 
-                            bw.write(String.format(
-                                "%s;%s;%s;%s;%s;%s;%s;%s",
-                                UUID.randomUUID().toString(),
-                                logged,
-                                firstName,
-                                lastName,                            
-                                address,
-                                paymentMethod,
-                                "False",
-                                String.join(",", splCart)));
+    JOptionPane.showMessageDialog(
+        MainFrame.this,
+        cartContent.toString(),
+        "Shopping Cart",
+        JOptionPane.INFORMATION_MESSAGE);
 
-                            bw.newLine();
-                            bw.close();
-                            fw.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+    // remove from cart
+}
 
-                        
-
-                        JOptionPane.showMessageDialog(deliverFrame, "Payment Successful!\nThank you, " + firstName + " " + lastName + "!");
-                        deliverFrame.dispose();
-                    }
-                }
-            });
-
-
-            
-            // Add components to the deliverFrame
-            JPanel deliveryPanel = new JPanel();
-            deliveryPanel.setLayout(new GridLayout(6, 2));
-            deliveryPanel.add(firstNameLabel);
-            deliveryPanel.add(firstNameField);
-            deliveryPanel.add(lastNameLabel);
-            deliveryPanel.add(lastNameField);
-            deliveryPanel.add(addressLabel);
-            deliveryPanel.add(addressField);
-            deliveryPanel.add(paymentMethodLabel);
-            deliveryPanel.add(paymentMethodCombo);
-            deliveryPanel.add(new JLabel()); // empty label for spacing
+private void removeFromCart(String product) {
+    shoppingCart.remove(product.split(" - ")[0]);
+    updateCartSizeLabel();
+}
 
 
-            deliverFrame.add(cartScrollPane, BorderLayout.NORTH);
-            deliverFrame.add(deliveryPanel, BorderLayout.CENTER);
-            deliverFrame.add(deliverButton, BorderLayout.SOUTH);
-            deliverFrame.setVisible(true);
+// Custom Buttons
+private void customizeProductButton(JLabel productLabel, CustomButton minusButton, CustomButton plusButton) {
+    productLabel.setFont(new Font("joystix monospace", Font.BOLD, 20));
+    productLabel.setForeground(Color.BLACK); // Set label text color
+    Color buttonColor = new Color(255, 255, 255);
+    minusButton.setBackground(buttonColor);
+    plusButton.setBackground(buttonColor);
 
-            
+    plusButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            addToCart(productLabel.getText());
         }
+    });
+
+    minusButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            removeFromCart(productLabel.getText());
+        }
+    });
+
+    minusButton.setPreferredSize(new Dimension(60, 50));
+    plusButton.setPreferredSize(new Dimension(60, 50));
+}
+
+// Delivery Frame
+private void DeliverWindow() {
+    JFrame deliverFrame = new JFrame("Delivery Details");
+    deliverFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    deliverFrame.setFont(new Font("joystix monospace", Font.BOLD, 30));
+    deliverFrame.setSize(500, 500);
+    deliverFrame.setLocationRelativeTo(this);
+    deliverFrame.setResizable(false);
+
+    deliverFrame.setLayout(new BorderLayout());
+
+
+    // Create a JTextArea to display the cart content
+    JTextArea cartTextArea = new JTextArea(10, 20);
+    cartTextArea.setEditable(false);
+    JScrollPane cartScrollPane = new JScrollPane(cartTextArea);
+
+
+    // Create other components for delivery details
+    JLabel firstNameLabel = new JLabel("First Name:");
+    JTextField firstNameField = new JTextField(15);
+    JLabel lastNameLabel = new JLabel("Last Name:");
+    JTextField lastNameField = new JTextField(15);
+    JLabel addressLabel = new JLabel("Address:");
+    JTextField addressField = new JTextField(15);
+    JLabel paymentMethodLabel = new JLabel("Payment Method:");
+    JComboBox<String> paymentMethodCombo = new JComboBox<>(new String[]{"Credit Card", "Cash on Delivery"});
+
+    // Display the cart content in the JTextArea
+    StringBuilder cartContent = new StringBuilder();
+
+    int iphone = 0, macbook = 0, samsung = 0, nike = 0,
+        totalIphone = 0, totalMacbook = 0, totalSamsung = 0, totalNike = 0;
+    for (String string : shoppingCart) {
+        if (string.equals("Iphone"))
+            iphone += 1;
+        else if (string.equals("Macbook"))
+            macbook += 1;
+        else if (string.equals("Samsung"))
+            samsung += 1;
+        else if (string.equals("Nike"))
+            nike += 1;
+    } 
+
+    if (iphone != 0)
+        cartContent.append(String.format("Iphone - %d pcs ($%d)", iphone, totalIphone = (int) (999.99 * iphone))).append("\n");
+    if (macbook != 0)
+        cartContent.append(String.format("Macbook - %d pcs ($%d)", macbook, totalMacbook = (int) (1999.99 * macbook))).append("\n");
+    if (samsung != 0)
+        cartContent.append(String.format("Samsung - %d pcs ($%d)", samsung, totalSamsung = (int) (729.99 * samsung))).append("\n");
+    if (nike != 0)
+        cartContent.append(String.format("Nike - %d pcs ($%d)", nike, totalNike = (int) (129.99 * nike))).append("\n");
+
+    cartContent.append(String.format("Total Amount: $%d", totalIphone + totalMacbook + totalSamsung + totalNike));
+    cartTextArea.setText(cartContent.toString());
+
+    CustomButton deliverButton = new CustomButton("Deliver");
+    deliverButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == deliverButton) {
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String address = addressField.getText();        
+                String paymentMethod = (String) paymentMethodCombo.getSelectedItem();
+
+                // Display the delivery details and cart content
+                StringBuilder deliveryDetails = new StringBuilder();
+                deliveryDetails.append("Delivery Details:\n\n");
+                deliveryDetails.append("First Name: ").append(firstName).append("\n");
+                deliveryDetails.append("Last Name: ").append(lastName).append("\n");
+                deliveryDetails.append("Address: ").append(address).append("\n");
+                deliveryDetails.append("Payment Method: ").append(paymentMethod).append("\n\n");
+                deliveryDetails.append("Cart Content:\n").append(cartTextArea.getText());
+
+                JOptionPane.showMessageDialog(deliverFrame, deliveryDetails.toString(), "Delivery Details", JOptionPane.INFORMATION_MESSAGE);
+
+
+                // Perform payment processing or save user information
+                // You can add your payment logic or database storage code here
+
+                try {
+                    FileWriter fw = new FileWriter(new File(dataDel.toURI()), true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+
+                    List<String> splCart = new ArrayList<String>(Arrays.asList(cartContent.toString().split("\n")));
+                    splCart.remove(splCart.size()-1);
+
+
+                    bw.write(String.format(
+                        "%s;%s;%s;%s;%s;%s;%s;%s",
+                        UUID.randomUUID().toString(),
+                        logged,
+                        firstName,
+                        lastName,                            
+                        address,
+                        paymentMethod,
+                        "False",
+                        String.join(",", splCart)));
+
+                    bw.newLine();
+                    bw.close();
+                    fw.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+                JOptionPane.showMessageDialog(deliverFrame, "Payment Successful!\nThank you, " + firstName + " " + lastName + "!");
+                deliverFrame.dispose();
+            }
+        }
+    });
+
+    // Add components to the deliverFrame
+    JPanel deliveryPanel = new JPanel();
+    deliveryPanel.setLayout(new GridLayout(6, 2));
+    deliveryPanel.add(firstNameLabel);
+    deliveryPanel.add(firstNameField);
+    deliveryPanel.add(lastNameLabel);
+    deliveryPanel.add(lastNameField);
+    deliveryPanel.add(addressLabel);
+    deliveryPanel.add(addressField);
+    deliveryPanel.add(paymentMethodLabel);
+    deliveryPanel.add(paymentMethodCombo);
+    deliveryPanel.add(new JLabel()); // empty label for spacing
+
+
+    deliverFrame.add(cartScrollPane, BorderLayout.NORTH);
+    deliverFrame.add(deliveryPanel, BorderLayout.CENTER);
+    deliverFrame.add(deliverButton, BorderLayout.SOUTH);
+    deliverFrame.setVisible(true);
+}
+
     
 
         
